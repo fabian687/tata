@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tată, rămâi cu noi</title>
+<meta name="description" content="Un site făcut de fiul tău. Pentru anii pe care îi mai avem de trăit împreună.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400;1,9..144,600&family=Manrope:wght@400;500;700;800&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#f6f1e8; --mute:#aab3c5; --dim:#6f7a91;
+  --card:rgba(24,31,48,.72); --line:rgba(255,255,255,.09);
+  --gold:#f5b94c; --gold2:#ffdc93; --rose:#ff8378; --green:#63d6a3; --sky:#86c8ff;
+  --smoke:#6e7487;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0;color:var(--ink);font-family:Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased;background:#0b1020}
+/* sky that turns from night to dawn as he scrolls */
+#sky{position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,
+  hsl(calc(228 - var(--p,0)*200),45%,calc(8% + var(--p,0)*8%)) 0%,
+  hsl(calc(232 - var(--p,0)*205),40%,calc(12% + var(--p,0)*14%)) 60%,
+  hsl(calc(250 - var(--p,0)*215),45%,calc(16% + var(--p,0)*22%)) 100%)}
+#stars{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:calc(1 - var(--p,0)*1.3)}
+.wrap{max-width:600px;margin:0 auto;padding:0 18px 130px}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;margin:0;font-weight:600;letter-spacing:-.01em}
+h2{font-size:30px;line-height:1.12}
+p{line-height:1.6;margin:0}
+.mute{color:var(--mute)}
+.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:10px}
+section{padding:64px 0 8px}
+.card{background:var(--card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:24px;padding:22px}
+.gap{height:14px}
+.btn{appearance:none;border:0;border-radius:15px;padding:15px 20px;font:800 16px Manrope,sans-serif;cursor:pointer;color:#231705;background:linear-gradient(180deg,var(--gold2),var(--gold));box-shadow:0 8px 24px rgba(245,185,76,.25)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.btn.small{padding:10px 14px;font-size:14px;border-radius:12px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.hidden{display:none!important}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s ease}
+.reveal.in{opacity:1;transform:none}
+.serif{font-family:Fraunces,serif}
+.gold{color:var(--gold)} .green{color:var(--green)} .rose{color:var(--rose)}
+.demo{position:sticky;top:0;z-index:4;background:#2b2240;border-bottom:1px dashed #6b5aa8;color:#ddd4ff;padding:9px 14px;font-size:13px;text-align:center}
+
+/* INTRO LETTER */
+#intro{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:40px 0}
+#intro .line{font-family:Fraunces,serif;font-size:27px;line-height:1.35;opacity:0;transform:translateY(10px);transition:opacity 1.4s ease,transform 1.4s ease;margin:0 0 16px}
+#intro .line.show{opacity:1;transform:none}
+#intro .line.big{font-size:40px;font-weight:600}
+#intro .sig{font-family:Caveat,cursive;font-size:30px;color:var(--gold2)}
+.scrollcue{margin-top:30px;color:var(--mute);font-size:14px;opacity:0;transition:opacity 1.5s}
+.scrollcue.show{opacity:1}
+.scrollcue span{display:inline-block;animation:bob 2s infinite}
+@keyframes bob{50%{transform:translateY(6px)}}
+
+/* BIG NUMBER */
+.mega{font:800 92px/1 Fraunces,serif;letter-spacing:-.03em;background:linear-gradient(180deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.mega small{font-size:30px}
+
+/* LIFE RIBBON */
+.ribbon{margin-top:18px}
+.ribbon .lab{display:flex;justify-content:space-between;font-size:13px;color:var(--mute);margin:14px 0 6px}
+.ribbon .lab b{color:var(--ink);font-size:14px}
+.ribbon svg{width:100%;height:auto;display:block;overflow:visible}
+.axis{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);margin-top:6px}
+
+/* GAIN GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.tile{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:18px;padding:16px}
+.tile b{display:block;font:800 30px Fraunces,serif;color:var(--gold2)}
+.tile span{color:var(--mute);font-size:14px;line-height:1.35;display:block;margin-top:2px}
+
+/* SON QUOTE */
+.hard{font-family:Fraunces,serif;font-size:24px;line-height:1.4}
+.hard em{font-style:normal;color:var(--rose)}
+.hard strong{font-weight:600;color:var(--green)}
+
+/* MOMENTS */
+.moments{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.mom{padding:18px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.mom h3{font-size:20px;line-height:1.25}
+.mom .when{font-size:13px;color:var(--mute);margin:6px 0 12px}
+.pbar{display:grid;grid-template-columns:92px 1fr 46px;gap:10px;align-items:center;font-size:13px;margin-top:7px}
+.pbar .t{height:10px;border-radius:9px;background:rgba(255,255,255,.07);overflow:hidden}
+.pbar .t i{display:block;height:100%;width:0;border-radius:9px;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.pbar.s i{background:var(--smoke)} .pbar.q i{background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.pbar .v{text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+.pbar.s .v{color:var(--mute)} .pbar.q .v{color:var(--gold2)}
+
+/* PACT */
+.pact{background:linear-gradient(180deg,#fbf6ea,#f1e6cf);color:#2a2213;border-radius:22px;padding:26px 22px;box-shadow:0 20px 50px rgba(0,0,0,.35);position:relative}
+.pact h2{color:#2a2213;font-size:28px}
+.pact p{color:#4a3d24}
+.pact .amount{font:800 54px Fraunces,serif;color:#8a5a00;margin:10px 0 2px}
+.pact ol{padding-left:20px;line-height:1.6;color:#4a3d24;margin:14px 0}
+.sigs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:56px}
+.sigs div{border-top:1.5px solid #8b7a57;padding-top:6px;font-size:13px;color:#6b5a39;min-height:64px;position:relative}
+.sigs .hand{font-family:Caveat,cursive;font-size:30px;color:#1d3d8a;position:absolute;top:-38px;left:2px}
+.pact .btn{width:100%;margin-top:18px}
+.stamp{position:absolute;right:18px;bottom:22px;transform:rotate(12deg);border:3px solid #b5302a;color:#b5302a;font:800 14px Manrope;padding:6px 10px;border-radius:8px;letter-spacing:.1em;opacity:.85}
+
+/* DASH */
+.clock{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px}
+.clock div{background:rgba(255,255,255,.05);border-radius:16px;padding:12px 2px;text-align:center}
+.clock b{display:block;font:600 32px Fraunces,serif;font-variant-numeric:tabular-nums}
+.clock span{font-size:12px;color:var(--mute)}
+.road{position:relative;height:84px;margin-top:18px}
+.road .track{position:absolute;left:0;right:0;bottom:12px;height:4px;border-radius:4px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0 14px,transparent 14px 26px)}
+.road .done{position:absolute;left:0;bottom:12px;height:4px;border-radius:4px;background:var(--gold);width:0;transition:width 1.2s}
+.road .car{position:absolute;bottom:14px;left:0;width:92px;transform:translateX(-10%);transition:left 1.2s}
+.road .flag{position:absolute;right:-4px;bottom:16px;font-size:26px}
+.money{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;margin-top:10px;text-align:center}
+.money b{display:block;font:800 22px Manrope;font-variant-numeric:tabular-nums}
+.money small{color:var(--mute);font-size:12px}
+
+/* CAPSULES */
+.caps{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.cap{border-radius:20px;padding:18px;border:1px solid var(--line);background:rgba(255,255,255,.035)}
+.cap.open{border-color:rgba(245,185,76,.5);background:linear-gradient(180deg,rgba(245,185,76,.10),rgba(255,255,255,.03))}
+.cap.next{border-color:rgba(134,200,255,.45)}
+.cap .top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.cap .when{font-weight:800}
+.cap .tag{font-size:12px;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.07);color:var(--mute);white-space:nowrap}
+.cap.open .tag{background:rgba(245,185,76,.2);color:var(--gold2)}
+.cap .msg{font-family:Fraunces,serif;font-size:19px;line-height:1.5;margin:12px 0 6px}
+.cap .from{color:var(--gold);font-weight:700;font-size:14px}
+.cap .lock{color:var(--mute);font-size:14px;margin-top:8px}
+
+/* HEALTH */
+.heal{display:flex;flex-direction:column;gap:14px;margin-top:14px}
+.h{display:grid;grid-template-columns:36px 1fr;gap:12px}
+.h .dot{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.05);border:1px solid var(--line);font-size:16px}
+.h.done .dot{background:rgba(99,214,163,.16);border-color:var(--green);color:var(--green)}
+.h b{display:block;font-size:15px}
+.h small{color:var(--mute);font-size:13px}
+.h .mini{height:6px;background:rgba(255,255,255,.07);border-radius:9px;overflow:hidden;margin-top:7px}
+.h .mini i{display:block;height:100%;background:var(--green)}
+
+/* TARGETS */
+.target{display:grid;grid-template-columns:110px 1fr;gap:16px;align-items:center;margin-top:6px}
+.ring{width:110px;height:110px}
+.ring text{font-family:Fraunces,serif}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.chip{font-size:12px;padding:6px 10px;border-radius:99px;border:1px solid var(--line);color:var(--dim)}
+.chip.ok{background:rgba(245,185,76,.16);border-color:rgba(245,185,76,.5);color:var(--gold2)}
+.chip.now{border-color:var(--sky);color:var(--sky)}
+.wins{display:flex;align-items:center;gap:10px;margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(99,214,163,.08);border:1px solid rgba(99,214,163,.25);font-size:14px}
+.wins b{font:800 22px Manrope;color:var(--green)}
+/* SOS MENU */
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.opt{appearance:none;text-align:left;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--ink);border-radius:18px;padding:14px;cursor:pointer;font:700 15px Manrope}
+.opt i{font-style:normal;font-size:26px;display:block;margin-bottom:6px}
+.opt small{display:block;font-weight:500;color:var(--mute);font-size:12px;margin-top:3px}
+.scratch{position:relative;border-radius:18px;overflow:hidden;margin:14px 0;height:260px;background:linear-gradient(160deg,#ffe8b8,#f5b94c)}
+.scratch .under{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:20px;color:#2a1d05;font-family:Fraunces,serif;font-size:21px;line-height:1.4}
+.scratch .under small{font-family:Manrope;font-size:13px;margin-top:10px;opacity:.75}
+.scratch canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:pointer}
+.tasks{text-align:left;margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.task{display:flex;gap:12px;align-items:center;padding:14px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid var(--line);cursor:pointer;font-weight:600}
+.task .box{width:26px;height:26px;border-radius:8px;border:2px solid var(--mute);flex:none;display:grid;place-items:center}
+.task.done{opacity:.6}.task.done .box{background:var(--green);border-color:var(--green);color:#0b1020}
+.bigcall{display:block;padding:16px;border-radius:16px;background:rgba(134,200,255,.12);border:1px solid rgba(134,200,255,.35);text-decoration:none;color:var(--ink);font-weight:700;margin:12px 0}
+/* SOS */
+.sos{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:5;width:calc(100% - 32px);max-width:560px;padding:17px;border-radius:18px;border:0;font:800 18px Manrope,sans-serif;color:#fff;cursor:pointer;background:linear-gradient(180deg,#ff7a6b,#dd4a44);box-shadow:0 12px 34px rgba(221,74,68,.4)}
+.modal{position:fixed;inset:0;z-index:10;background:rgba(6,8,14,.93);display:flex;align-items:center;justify-content:center;padding:18px}
+.sheet{width:100%;max-width:480px;background:#161d2e;border:1px solid var(--line);border-radius:26px;padding:24px;text-align:center;max-height:92vh;overflow:auto}
+.breath{width:190px;height:190px;margin:18px auto;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,rgba(134,200,255,.55),rgba(134,200,255,.1));border:2px solid rgba(134,200,255,.5);transform:scale(.6)}
+.breath span{font:600 21px Fraunces,serif}
+.timer{font:800 36px Manrope;font-variant-numeric:tabular-nums}
+.quote{font-family:Fraunces,serif;font-size:19px;line-height:1.45;background:rgba(255,255,255,.05);border-radius:16px;padding:16px;margin:14px 0}
+label{display:block;text-align:left;font-size:13px;color:var(--mute);margin:12px 0 5px}
+input,textarea{width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--ink);font:600 15px Manrope,sans-serif}
+a{color:var(--sky)}
+.note{font-size:12px;color:var(--dim);line-height:1.55;margin-top:14px}
+footer{color:var(--dim);font-size:12px;line-height:1.6;margin-top:40px}
+footer a{color:var(--mute)}
+.linkish{background:none;border:0;color:var(--mute);text-decoration:underline;font:500 14px Manrope;cursor:pointer;padding:6px}
+.confetti{position:fixed;top:-20px;z-index:20;width:10px;height:14px;border-radius:2px;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+</style>
+</head>
+<body>
+<div id="sky"></div>
+<canvas id="stars"></canvas>
+<div id="demoBanner" class="demo hidden">Previzualizare: așa arată după 40 de zile de la semnare. Nimic nu se salvează.</div>
+
+<div class="wrap">
+
+<!-- ============ 1. LETTER ============ -->
+<section id="intro">
+  <p class="line big" data-d="300">Tată,</p>
+  <p class="line" data-d="1600">nu-ți scriu ca să-ți țin predici despre fumat.<br>Le știi pe toate.</p>
+  <p class="line" data-d="3400">Îți scriu pentru că am făcut niște socoteli.<br>Nu cu bani.<br><span class="gold">Cu ani.</span></p>
+  <p class="line" data-d="5400">Anii în care încă poți să fii lângă <span class="momN">mami</span>.<br>Lângă mine. Lângă <span id="iNepot">nepoțelul tău</span>.<br>Și lângă copiii mei, care încă nu s-au născut.</p>
+  <p class="line" data-d="7400">Mi-e destul de greu fără <span class="gpN">tataita</span>.<br><span class="gold">Nu vreau să-mi fie și mai greu fără tine.</span></p>
+  <p class="line sig" data-d="9400">— <span id="iSon">fiul tău</span></p>
+  <div class="scrollcue" id="cue">Dă în jos, încet <span>↓</span></div>
+</section>
+
+<!-- ============ DASHBOARD (after signing) ============ -->
+<section id="dash" class="hidden">
+  <div class="card reveal">
+    <div class="eyebrow">Tată, fără nicio țigară de</div>
+    <div class="clock">
+      <div><b id="cD">0</b><span>zile</span></div>
+      <div><b id="cH">0</b><span>ore</span></div>
+      <div><b id="cM">0</b><span>minute</span></div>
+      <div><b id="cS">0</b><span>secunde</span></div>
+    </div>
+    <div class="grid2">
+      <div class="tile"><b id="dLife">0</b><span>de viață luate înapoi de la țigări, până acum</span></div>
+      <div class="tile"><b id="dCigs">0</b><span>țigări pe care nu le-ai aprins</span></div>
+    </div>
+  </div>
+  <div class="gap"></div>
+  <div class="card reveal">
+    <div class="eyebrow">Obiectivul tău acum</div>
+    <div class="target">
+      <svg class="ring" viewBox="0 0 110 110">
+        <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10"/>
+        <circle id="ringArc" cx="55" cy="55" r="46" fill="none" stroke="#f5b94c" stroke-width="10" stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="289" transform="rotate(-90 55 55)" style="transition:stroke-dashoffset 1s"/>
+        <text id="ringPct" x="55" y="62" text-anchor="middle" font-size="24" fill="#ffdc93">0%</text>
+      </svg>
+      <div>
+        <h2 id="tName" style="font-size:26px">3 zile</h2>
+        <p class="mute" id="tLeft" style="font-size:15px;margin-top:4px"></p>
+      </div>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="wins"><b id="winsN">0</b><span>pofte învinse cu butonul roșu. Fiecare contează.</span></div>
+  </div>
+  <div class="gap"></div>
+  <div class="card reveal" id="phaseCard">
+    <div class="eyebrow" id="phEye">Ce te așteaptă acum</div>
+    <h2 id="phTitle" style="font-size:24px"></h2>
+    <p id="phFeel" style="margin-top:10px"></p>
+    <div class="tasks" id="phTips" style="margin-bottom:0"></div>
+    <div class="bar" style="height:8px;background:rgba(255,255,255,.07);border-radius:9px;overflow:hidden;margin-top:14px"><i id="phBar" style="display:block;height:100%;width:0;background:linear-gradient(90deg,#ff8378,#f5b94c,#63d6a3);transition:width 1s"></i></div>
+    <div class="axis"><span>greu</span><span>mai ușor</span><span>liber</span></div>
+  </div>
+  <div class="gap"></div>
+  <div class="card reveal">
+    <div class="eyebrow">Drumul spre Duster</div>
+    <h2 id="dusterTitle">Încă 183 de zile</h2>
+    <div class="road">
+      <div class="track"></div><div class="done" id="roadDone"></div>
+      <svg class="car" id="car" viewBox="0 0 120 50" aria-hidden="true">
+        <path d="M8 36 L10 24 Q12 20 18 19 L34 17 L46 8 Q49 6 54 6 L86 6 Q92 6 95 9 L104 18 Q114 20 116 26 L116 36 Z" fill="#f5b94c"/>
+        <path d="M49 10 L56 10 L56 18 L40 18 Z M60 10 L84 10 Q88 10 90 12 L96 18 L60 18 Z" fill="#20283d"/>
+        <rect x="6" y="34" width="112" height="4" rx="2" fill="#c98f2a"/>
+        <circle cx="30" cy="38" r="8" fill="#151a28"/><circle cx="30" cy="38" r="3.5" fill="#aab3c5"/>
+        <circle cx="94" cy="38" r="8" fill="#151a28"/><circle cx="94" cy="38" r="3.5" fill="#aab3c5"/>
+      </svg>
+      <div class="flag">🔑</div>
+    </div>
+    <div class="money">
+      <div><b class="gold" id="mGift">6.000 €</b><small id="mGiftL">de la mine, la 6 luni</small></div>
+      <div class="mute">+</div>
+      <div><b class="green" id="mSaved">0 €</b><small>bani rămași la tine din țigări</small></div>
+    </div>
+    <p class="mute" id="dusterText" style="margin-top:14px;font-size:15px"></p>
+  </div>
+</section>
+
+<!-- ============ 2. YEARS ============ -->
+<section>
+  <div class="reveal">
+    <div class="eyebrow">Ce câștigi dacă te lași acum</div>
+    <div class="mega"><span id="gainBig">+4</span><small> ani</small></div>
+    <p style="font-size:19px;margin-top:10px" class="serif">Atât îți dă înapoi, în medie, renunțarea la fumat la <span id="ageTxt">55</span> de ani. Ani întregi, nu zile.</p>
+    <p class="mute" style="margin-top:10px">Cel mai mare studiu de până acum pe tema asta (New England Journal of Medicine, peste 200.000 de oameni) a arătat că fumătorii pierd în medie peste 10 ani de viață, și că o bună parte din ei se recuperează la orice vârstă la care te lași.</p>
+  </div>
+
+  <div class="card reveal ribbon" style="margin-top:22px">
+    <div class="eyebrow">Viața ta, în două variante</div>
+    <p class="mute" style="font-size:14px">Cât de tare e banda arată cât de probabil e să mai fii acolo, la fiecare vârstă.</p>
+    <div class="lab"><span>Dacă fumezi în continuare</span><b id="rS">~73 ani</b></div>
+    <svg id="ribS" viewBox="0 0 500 34"></svg>
+    <div class="lab"><span>Dacă te lași de acum</span><b class="gold" id="rQ">~77 ani</b></div>
+    <svg id="ribQ" viewBox="0 0 500 34"></svg>
+    <div class="axis" id="axis"></div>
+    <p class="note">Steluțele sunt momentele de mai jos. Cifrele de la capăt sunt vârsta până la care trăiește jumătate dintre oamenii în situația ta.</p>
+  </div>
+</section>
+
+<!-- ============ 3. WHAT THE YEARS MEAN ============ -->
+<section>
+  <div class="reveal">
+    <div class="eyebrow">Ce înseamnă <span class="gainWord">4 ani</span></div>
+    <h2>Nu sunt cifre.<br>Sunt mesele noastre de duminică.</h2>
+  </div>
+  <div class="grid2 reveal">
+    <div class="tile"><b id="g1">4</b><span>Crăciunuri în plus, toți la aceeași masă</span></div>
+    <div class="tile"><b id="g2">208</b><span>duminici în plus în care vin la tine</span></div>
+    <div class="tile"><b id="g3">8</b><span>zile de naștere ale nepoților, la care tu sufli lumânările cu ei</span></div>
+    <div class="tile"><b id="g4">1.460</b><span>dimineți în plus în care te trezești și respiri ușor</span></div>
+  </div>
+</section>
+
+<!-- ============ 4. THE HARD TRUTH ============ -->
+<section>
+  <div class="card reveal">
+    <div class="eyebrow">Tată, partea grea</div>
+    <p class="hard" id="hardText"></p>
+    <p class="mute" style="margin-top:16px" id="hardText2"></p>
+    <p class="hard" style="font-size:21px;margin-top:22px">Și <span class="momN">mami</span>.</p>
+    <p class="mute" style="margin-top:8px">În România, femeile trăiesc în medie cu aproape 8 ani mai mult decât bărbații. Nu vreau ca <span class="momN">mami</span> să-și petreacă anii ăia singură, la o masă cu un scaun gol. Vreau să îmbătrâniți împreună. Ea te vrea lângă ea, nu o poză pe perete.</p>
+    <p class="hard" style="font-size:22px;margin-top:22px">Viața mea e destul de grea fără <span class="gpN">tataita</span>.<br><strong>Te rog, nu mi-o face și mai grea fără tine.</strong></p>
+    <p class="note">Socotit după statisticile de mortalitate pentru bărbații din România și riscul măsurat la fumători. E o medie, nu o predicție pentru tine. Dar mediile astea sunt făcute din oameni reali.</p>
+  </div>
+</section>
+
+<!-- ============ 5. MOMENTS ============ -->
+<section>
+  <div class="reveal">
+    <div class="eyebrow">Momentele la care vreau să fii</div>
+    <h2>Șansele tale să fii acolo</h2>
+    <p class="mute" style="margin-top:8px">Pentru fiecare moment: cât de probabil e să mai fii lângă noi atunci, fumând sau fără țigări.</p>
+  </div>
+  <div class="moments" id="moments"></div>
+</section>
+
+<!-- ============ 6. PACT ============ -->
+<section id="pactSec">
+  <div class="reveal">
+    <div class="eyebrow">Și acum, partea frumoasă</div>
+    <h2>Pactul nostru</h2>
+    <p class="mute" style="margin-top:8px">Știu că ți-ai dorit Duster-ul. Așa că hai să facem o înțelegere, între noi doi.</p>
+  </div>
+  <div class="gap"></div>
+  <div class="pact reveal">
+    <div class="stamp hidden" id="stamp">SEMNAT</div>
+    <h2>Înțelegere între tată și fiu</h2>
+    <ol>
+      <li><b>Tu</b> te lași de fumat. De tot. Fără „doar una”.</li>
+      <li>După <b>6 luni</b> fără nicio țigară, <b>eu</b> îți dau:</li>
+    </ol>
+    <div class="amount">6.000 €</div>
+    <p>ca să pui diferența și să-ți iei <b>Duster-ul</b>. Plus banii pe care nu i-ai mai dat pe țigări: încă vreo <b id="pactSaved">1.200 €</b> în 6 luni.</p>
+    <p style="margin-top:10px">Pactul e pe cuvânt de onoare. Dacă scapi una, îmi spui, și o luăm de la capăt împreună. Nu e rușine. Rușine ar fi să nu mai încercăm.</p>
+    <div class="sigs">
+      <div><span class="hand" id="sigSon">Fiul tău</span>Fiul</div>
+      <div><span class="hand hidden" id="sigDad">Tata</span>Tata</div>
+    </div>
+    <button class="btn" id="signBtn">Semnez. De azi nu mai fumez.</button>
+    <button class="linkish" id="signPick" style="width:100%;margin-top:6px">M-am lăsat deja de câteva zile</button>
+    <div id="pickBox" class="hidden">
+      <label for="pickDate">Ultima țigară a fost pe:</label>
+      <input type="datetime-local" id="pickDate">
+      <button class="btn" id="pickGo">Semnez de la data asta</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. CAPSULES ============ -->
+<section>
+  <div class="reveal">
+    <div class="eyebrow">Capsule de timp</div>
+    <h2>Mesaje care te așteaptă</h2>
+    <p class="mute" style="margin-top:8px">Fiecare se deschide doar când ajungi la el, numărat de la semnarea pactului. Nu poți trișa.</p>
+  </div>
+  <div class="caps" id="caps"></div>
+</section>
+
+<!-- ============ 8. HEALTH ============ -->
+<section>
+  <div class="card reveal">
+    <div class="eyebrow">Ce se repară în tine</div>
+    <h2>Corpul tău începe din prima zi</h2>
+    <div class="heal" id="heal"></div>
+    <p class="note">După OMS și CDC. Momentele sunt aproximative.</p>
+  </div>
+</section>
+
+<!-- ============ 9. HELP ============ -->
+<section>
+  <div class="card reveal">
+    <div class="eyebrow">Nu trebuie să o faci doar pe voință</div>
+    <h2>Arme adevărate</h2>
+    <p style="margin-top:10px">Voința singură e cea mai grea cale. Plasturii sau guma cu nicotină și pastilele pe care le prescrie medicul cresc mult șansele, mai ales dacă le combini cu consiliere.</p>
+    <p style="margin-top:10px"><b>Pasul 1:</b> o discuție cu medicul de familie, săptămâna asta.</p>
+    <p style="margin-top:10px"><b>Pasul 2:</b> Programul Național <b>Stop Fumat</b> (Institutul „Marius Nasta”): <a href="https://www.stopfumat.eu">stopfumat.eu</a>, TelVerde <b>0800 878 673</b>.</p>
+    <p style="margin-top:10px"><b>Pasul 3:</b> butonul roșu de jos, oricând te trage.</p>
+    <div class="row" style="margin-top:16px">
+      <button class="btn ghost small" id="slipBtn">Am fumat una…</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><b>De unde vin cifrele</b></p>
+  <p>Ani de viață pierduți și recuperați: Jha et al., <a href="https://www.nejm.org/doi/full/10.1056/NEJMsa1211128">„21st-Century Hazards of Smoking and Benefits of Cessation”</a>, NEJM 2013. Cine se lasă între 35 și 44 de ani recuperează ~9 ani, între 45 și 54 ~6 ani, între 55 și 64 ~4 ani; după 65 de ani, estimări de ~1–2 ani (Taylor et al., 2002). Riscul de deces la bărbații fumători: de 2,8 ori mai mare.</p>
+  <p>17 minute pe țigară, la bărbați: University College London, revista Addiction, 2025.</p>
+  <p>Speranța de viață în România, 2024: 80,4 ani la femei, 72,8 ani la bărbați (raportul UE privind sănătatea în România). Mortalitatea bărbaților din România: Eurostat/INS (speranța de viață la 65 de ani: ~15 ani). Șansele sunt calculate cu un model statistic simplificat. Sunt medii, nu predicții individuale.</p>
+  <p style="margin-top:14px">Făcut cu dragoste de fiul tău. <button class="linkish" id="settingsBtn">Setări</button></p>
+</footer>
+</div>
+
+<button class="sos hidden" id="sosBtn">Am poftă acum</button>
+
+<!-- SOS -->
+<div class="modal hidden" id="sosModal"><div class="sheet">
+  <div id="vMenu">
+    <div class="eyebrow">Pofta trece în 3–5 minute</div>
+    <h2 style="font-size:25px">Hai s-o batem împreună</h2>
+    <div class="quote" id="sosQuote"></div>
+    <p class="mute" style="font-size:14px">Alege un lucru și fă-l acum:</p>
+    <div class="opts">
+      <button class="opt" data-v="vBreath"><i>🌬️</i>Respiră cu mine<small>3 minute, ghidat</small></button>
+      <button class="opt" data-v="vScratch"><i>🧽</i>Șterge fumul<small>cu degetul, 1 minut</small></button>
+      <button class="opt" data-v="vTask"><i>✅</i>Fă ceva acum<small>3 lucruri mici</small></button>
+      <button class="opt" data-v="vTalk"><i>📞</i>Vorbește cu noi<small>nu lupta singur</small></button>
+    </div>
+    <button class="linkish" id="sosClose" style="margin-top:12px">Închide</button>
+  </div>
+
+  <div id="vBreath" class="hidden">
+    <div class="eyebrow">Respiră cu mine</div>
+    <p class="mute">Nu trebuie să te lași pentru totdeauna acum. Doar pentru următoarele 3 minute.</p>
+    <div class="breath" id="breath"><span id="breathTxt">Inspiră</span></div>
+    <div class="timer" id="sosTimer">3:00</div>
+  </div>
+
+  <div id="vScratch" class="hidden">
+    <div class="eyebrow">Șterge fumul</div>
+    <p class="mute">Freacă ecranul cu degetul. Dedesubt e ceva pentru tine.</p>
+    <div class="scratch"><div class="under" id="scrMsg"></div><canvas id="scr"></canvas></div>
+  </div>
+
+  <div id="vTask" class="hidden">
+    <div class="eyebrow">Fă ceva acum</div>
+    <p class="mute">Bifează-le pe rând. Până termini, pofta trece.</p>
+    <div class="tasks" id="tasks"></div>
+  </div>
+
+  <div id="vTalk" class="hidden">
+    <div class="eyebrow">Nu trebuie să lupți singur</div>
+    <a class="bigcall hidden" id="callSon" href="#">📞 Sună-l pe <span class="sonN"></span>: <span id="sosNum"></span></a>
+    <p style="margin:12px 0">Sau trimite-mi doar atât: <b>„Mă trage, dar rezist.”</b> Îți răspund imediat.</p>
+    <p class="mute">Sau du-te la <span class="momN">mami</span> și spune-i: „Mă trage.” Atât. Nu trebuie să explici nimic. Doar să nu fii singur cu pofta.</p>
+  </div>
+
+  <div id="vFoot" class="hidden">
+    <button class="btn" style="width:100%;margin-top:14px" id="sosWin">Am învins pofta 💪</button>
+    <button class="linkish" id="sosBack">← alt lucru</button>
+  </div>
+</div></div>
+
+<!-- SLIP -->
+<div class="modal hidden" id="slipModal"><div class="sheet">
+  <h2 style="font-size:26px">E în regulă, tată.</h2>
+  <p style="margin-top:12px">O țigară nu șterge zilele pe care le-ai câștigat deja. Aproape toți cei care s-au lăsat definitiv au avut și ei un moment ca ăsta.</p>
+  <p class="mute" style="margin-top:10px">Pactul e pe cuvânt. Spune-mi și hotărâm împreună. Și gândește-te ce te-a făcut să aprinzi: stresul, cafeaua, cineva care fuma lângă tine? Data viitoare apasă butonul roșu înainte.</p>
+  <div class="row" style="justify-content:center;margin-top:16px">
+    <button class="btn" id="slipKeep">Merg mai departe</button>
+    <button class="btn ghost" id="slipReset">O iau de la zero</button>
+  </div>
+</div></div>
+
+<!-- SETTINGS -->
+<div class="modal hidden" id="setModal"><div class="sheet" style="text-align:left">
+  <h2 style="font-size:24px">Setări</h2>
+  <p class="mute" style="font-size:13px;margin-top:4px">Se salvează doar pe telefonul ăsta.</p>
+  <label>Vârsta fiului</label><input type="number" id="sSon">
+  <label>Câți ani avea tata când s-a născut fiul</label><input type="number" id="sDadAt">
+  <label>Numele fiului (pentru semnătură)</label><input id="sSonName">
+  <label>Numele nepoțelului</label><input id="sNepot">
+  <label>Vârsta nepoțelului</label><input type="number" id="sNepotAge">
+  <label>Telefonul fiului (pentru butonul roșu)</label><input id="sPhone">
+  <label>Ultima țigară (dacă e semnat)</label><input type="datetime-local" id="sStart">
+  <div class="row" style="margin-top:18px">
+    <button class="btn" id="setSave">Salvează</button>
+    <button class="btn ghost" id="setClose">Închide</button>
+    <button class="linkish" id="setWipe">Șterge tot</button>
+  </div>
+</div></div>
+
+<script>
+/* ======================================================================
+   CONFIG — what makes this site HIS. Edit these.
+   ====================================================================== */
+var CONFIG = {
+  sonAge: 28,            // vârsta ta
+  dadAtBirth: 24,        // câți ani avea tata când te-ai născut (vârsta lui = sonAge + 24)
+  momName: 'mami',       // cum îi spuneți mamei
+  grandpaName: 'tataita', // bunicul care ne lipsește
+  sonName: '',           // numele tău (apare la semnătură); gol = „Fiul tău”
+  nepotName: '',         // numele nepoțelului (băiatul surorii); gol = „nepoțelul”
+  nepotAge: 2,
+  sonFirstChildIn: 4,    // peste câți ani ți-ar plăcea să ai primul copil (estimare)
+  sonPhone: '',          // ex. '07xx xxx xxx' — apare la butonul roșu
+  packPrice: 33.5,       // lei / pachet Sobranie
+  perDay: 20,            // țigări pe zi
+  eurRon: 5.1,           // curs aproximativ
+  gift: 6000,            // € de la fiu
+  pactDays: 183          // 6 luni
+};
+
+/* ====================================================================== */
+(function(){
+var KEY='tata-ramai-v2', HOUR=36e5, DAY=24*HOUR;
+var demo = location.hash==='#demo';
+var st = load();
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ return {}; } }
+function save(){ if(demo) return; try{ localStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} }
+var C; function setC(){ C=Object.assign({}, CONFIG, st.cfg||{}); C.dadAge=C.sonAge+C.dadAtBirth; } setC();
+if(demo){ st={start:Date.now()-40*DAY-5*HOUR}; document.getElementById('demoBanner').classList.remove('hidden'); }
+
+var $=function(id){return document.getElementById(id)};
+var fmt=function(n,d){return Number(n).toLocaleString('ro-RO',{minimumFractionDigits:d||0,maximumFractionDigits:d||0})};
+var ani=function(n){n=Math.round(n);return n===1?'1 an':n+((n%100>=20||n%100===0&&n>0)?' de ani':' ani')};
+var nepot=function(){return C.nepotName||'nepoțelul'};
+var sonN=function(){return C.sonName||'fiul tău'};
+
+/* ---------- STATISTICAL MODEL ----------
+   Gompertz mortality calibrated to Romanian men (remaining life expectancy at 65 ≈ 15.1 y, Eurostat 2024),
+   population = 70% never-smokers + 30% smokers; current smokers HR 2.8 (Jha 2013, men).
+   Quitter multiplier solved so the life-expectancy gain matches Jha 2013 by quit age. */
+var GB=0.095, GA=2.8136e-5, HR=2.8;
+function surv(age,t,m){ return Math.exp(-GA*m/GB*(Math.exp(GB*(age+t))-Math.exp(GB*age))); }
+function le(age,m){ var s=0,dt=.25; for(var t=0;t<115-age;t+=dt) s+=surv(age,t+dt/2,m)*dt; return s; }
+function gainFor(a){ return a<35?10 : a<45?9 : a<55?6 : a<65?4 : a<75?2 : 1; }
+function solveM(age){
+  var g=gainFor(age), base=le(age,HR), lo=1, hi=HR;
+  if(le(age,1)-base<=g) return 1;
+  for(var i=0;i<40;i++){ var mid=(lo+hi)/2; if(le(age,mid)-base>g) lo=mid; else hi=mid; }
+  return (lo+hi)/2;
+}
+function median(age,m){ var t=0; while(surv(age,t,m)>.5 && t<60) t+=.05; return age+t; }
+
+var M = {};
+function computeModel(){
+  M.age=C.dadAge; M.mq=solveM(C.dadAge); M.gain=gainFor(C.dadAge);
+  M.medS=median(C.dadAge,HR); M.medQ=median(C.dadAge,M.mq);
+}
+
+/* ---------- MOMENTS ---------- */
+function moments(){
+  var n=nepot(), na=C.nepotAge, fc=C.sonFirstChildIn, sa=C.sonAge;
+  var list=[
+    {y:Math.max(1,7-na), t:'Prima zi de școală a '+(C.nepotName?'lui '+C.nepotName:'nepoțelului'), s:'cu ghiozdanul mai mare decât el'},
+    {y:fc, t:'Să-l ții în brațe pe primul meu copil', s:'nepotul tău, din partea mea'},
+    {y:fc+5, t:'Să-l înveți pe copilul meu să meargă pe bicicletă', s:'cum m-ai învățat pe mine'},
+    {y:Math.max(1,18-na), t:n.charAt(0).toUpperCase()+n.slice(1)+' face 18 ani', s:'și vrea să ciocnească prima dată cu bunicul'},
+    {y:fc+10, t:'Ziua de 10 ani a copilului meu', s:'cu tine la masă, nu într-o poză'},
+    {y:Math.max(1,50-sa), t:'Ziua mea de 50 de ani', s:'vreau să ridici tu primul pahar'},
+    {y:fc+18, t:'Majoratul copilului meu', s:'trei generații în aceeași poză'},
+    {y:Math.max(1,75-C.dadAge), t:'Să îmbătrânești lângă '+C.momName, s:'de mână cu ea pe bancă în parc, la 75 de ani'}
+  ];
+  list.forEach(function(e){ e.age=C.dadAge+e.y; e.ps=surv(C.dadAge,e.y,HR); e.pq=surv(C.dadAge,e.y,M.mq); });
+  list.sort(function(a,b){return a.y-b.y});
+  return list;
+}
+
+/* ---------- RENDER STORY ---------- */
+function ribbon(svgId,m,events){
+  var svg=$(svgId), a0=C.dadAge, a1=100, W=500, H=34, id='g'+svgId;
+  var stops='';
+  for(var x=0;x<=40;x++){ var age=a0+(a1-a0)*x/40, p=surv(a0,age-a0,m);
+    stops+='<stop offset="'+(x/40)+'" stop-color="'+(svgId==='ribQ'?'#f5b94c':'#8a90a3')+'" stop-opacity="'+p.toFixed(3)+'"/>'; }
+  var pins='';
+  events.forEach(function(e){ var x=(e.age-a0)/(a1-a0)*W; if(x<W) pins+='<text x="'+x+'" y="11" font-size="12" text-anchor="middle" fill="'+(svgId==='ribQ'?'#ffdc93':'#aab3c5')+'">✦</text>'; });
+  var med=(svgId==='ribQ'?M.medQ:M.medS), mx=(med-a0)/(a1-a0)*W;
+  svg.innerHTML='<defs><linearGradient id="'+id+'">'+stops+'</linearGradient></defs>'+
+    '<rect x="0" y="14" width="'+W+'" height="16" rx="8" fill="rgba(255,255,255,.05)"/>'+
+    '<rect x="0" y="14" width="'+W+'" height="16" rx="8" fill="url(#'+id+')"/>'+
+    '<line x1="'+mx+'" x2="'+mx+'" y1="12" y2="32" stroke="#fff" stroke-width="2" stroke-dasharray="2 2" opacity=".7"/>'+pins;
+}
+
+function renderStory(){
+  computeModel();
+  var g=M.gain, ev=moments();
+  $('iNepot').textContent=C.nepotName||'nepoțelul tău';
+  document.querySelectorAll('.momN').forEach(function(x){x.textContent=C.momName});
+  document.querySelectorAll('.gpN').forEach(function(x){x.textContent=C.grandpaName});
+  $('iSon').textContent=C.sonName||'fiul tău';
+  $('sigSon').textContent=C.sonName||'Fiul tău';
+  $('gainBig').textContent='+'+g;
+  $('ageTxt').textContent=C.dadAge;
+  document.querySelectorAll('.gainWord').forEach(function(e){e.textContent=g+(g===1?' an':' ani')});
+  $('g1').textContent=fmt(g); $('g2').textContent=fmt(g*52); $('g3').textContent=fmt(g*2); $('g4').textContent=fmt(g*365);
+  $('rS').textContent='~'+Math.round(M.medS)+' ani'; $('rQ').textContent='~'+Math.round(M.medQ)+' ani';
+  ribbon('ribS',HR,ev); ribbon('ribQ',M.mq,ev);
+  var ax=''; [C.dadAge,70,80,90,100].forEach(function(a,i){ if(i===0||a>C.dadAge+4) ax+='<span>'+a+'</span>'; }); $('axis').innerHTML=ax;
+
+  // the hard truth
+  var sonAtS=Math.round(C.sonAge+(M.medS-C.dadAge)), sonAtQ=Math.round(C.sonAge+(M.medQ-C.dadAge));
+  var kidAtS=Math.round(M.medS-C.dadAge-C.sonFirstChildIn), kidAtQ=Math.round(M.medQ-C.dadAge-C.sonFirstChildIn);
+  var nAtS=Math.round(C.nepotAge+(M.medS-C.dadAge)), nAtQ=Math.round(C.nepotAge+(M.medQ-C.dadAge));
+  $('hardText').innerHTML='Dacă fumezi în continuare, statistic, cel mai probabil n-o să mă mai vezi după ce împlinesc <em>'+ani(sonAtS)+'</em>.<br><br>Dacă te lași, poți să fii lângă mine și când am <strong>'+sonAtQ+'</strong>.';
+  var kidS = kidAtS>0 ? 'Copilul meu ar rămâne fără bunic la doar <b class="rose">'+ani(kidAtS)+'</b>.' : 'Copilul meu s-ar putea să nu te cunoască deloc.';
+  $('hardText2').innerHTML=kidS+' Fără țigări, ar avea <b class="gold">'+ani(Math.max(kidAtQ,0))+'</b>: destul de mare cât să te țină minte toată viața. Iar '+nepot()+' ar avea <b class="rose">'+ani(nAtS)+'</b> față de <b class="gold">'+ani(nAtQ)+'</b>.';
+
+  // moments
+  var box=$('moments'); box.innerHTML='';
+  ev.forEach(function(e){
+    var d=document.createElement('div'); d.className='mom reveal';
+    d.innerHTML='<h3>'+e.t+'</h3><div class="when">peste ~'+e.y+(e.y===1?' an':' ani')+' · tu ai avea '+e.age+' de ani · '+e.s+'</div>'+
+      '<div class="pbar s"><span>Fumând</span><div class="t"><i data-w="'+(e.ps*100)+'"></i></div><span class="v">'+Math.round(e.ps*100)+'%</span></div>'+
+      '<div class="pbar q"><span>Fără țigări</span><div class="t"><i data-w="'+(e.pq*100)+'"></i></div><span class="v">'+Math.round(e.pq*100)+'%</span></div>';
+    box.appendChild(d);
+  });
+  $('pactSaved').textContent=fmt(Math.round(C.pactDays*C.packPrice/C.eurRon/50)*50)+' €';
+  $('mGift').textContent=fmt(C.gift)+' €';
+  observe();
+}
+
+/* ---------- CAPSULES ---------- */
+function caps(){ var n=nepot(), N=n.charAt(0).toUpperCase()+n.slice(1); return [
+  {h:24, when:'Ziua 1', from:sonN(), msg:'Prima zi s-a terminat. Știu că te-a tras de o sută de ori. Și n-ai cedat. Tată, sunt mândru de tine. Și abia am început.'},
+  {h:72, when:'Ziua 3', from:sonN(), msg:'Azi e de obicei cea mai grea zi. Nicotina iese din corp și de-asta te strânge atât de tare. Dacă treci de azi, ai trecut de vârf. De mâine începe să fie mai ușor. Promit.'},
+  {h:7*24, when:'O săptămână', from:'fiica ta', msg:'Tati, a aflat toată lumea. Toți sunt cu ochii pe tine, dar cu drag. '+N+' te întreabă mereu. Te iubim.'},
+  {h:10*24, when:'Zece zile', from:C.momName, msg:'Dragul meu, de zece zile casa miroase altfel. Tu miroși altfel. Și te văd mai liniștit decât credeam. Nu ți-am zis-o de mult: sunt mândră de tine. Vreau să mai avem mulți ani doar ai noștri.'},
+  {h:14*24, when:'Două săptămâni', from:N+' (cu ajutorul mamei)', msg:'Bunicuuu! Vreau să alergi după mine prin curte și să nu obosești. Și să mă iei în brațe sus, sus de tot! Pup!'},
+  {h:30*24, when:'O lună', from:sonN(), msg:'O lună întreagă. Asta înseamnă un singur lucru: că poți. Nu mai e o încercare, e cine ești acum. Mai sunt 5 luni până la Duster.'},
+  {h:90*24, when:'Trei luni', from:'nepoții tăi care încă nu s-au născut', msg:'Bunicule, încă nu ne cunoști. Dar într-o zi o să venim. Și vrem să ne iei de mână, să ne duci în parc și să ne spui povești cu tata când era mic. Te rugăm să ne aștepți.'},
+  {h:C.pactDays*24, when:'6 luni: Duster-ul', from:sonN(), msg:'Ai reușit. 6 luni fără nicio țigară. Pactul e pact: cei 6.000 € sunt ai tăi. Hai să mergem să-ți alegi Duster-ul. Dar să știi că adevăratul cadou mi l-ai făcut tu mie.'},
+  {h:365*24, when:'Un an', from:C.momName+' și toată familia', msg:'Un an. Ai luat înapoi ani din viața ta. Ani pentru noi. Nu există cadou mai mare pe care ni-l puteai face. Mulțumim, tată.'}
+];}
+
+function dur(ms){ if(ms<=0) return 'acum'; var d=Math.floor(ms/DAY),h=Math.floor(ms%DAY/HOUR),m=Math.floor(ms%HOUR/6e4);
+  if(d>0) return d+(d===1?' zi':' zile')+(d<10?' '+h+' h':''); if(h>0) return h+' h '+m+' min'; return Math.max(1,m)+' min'; }
+function el(){ return st.start? Math.max(0,Date.now()-st.start):0; }
+
+var lastOpen=-1;
+function renderCaps(){
+  var e=el(), box=$('caps'); box.innerHTML=''; var next=false;
+  caps().forEach(function(c){
+    var open=!!st.start && e>=c.h*HOUR, d=document.createElement('div');
+    d.className='cap'+(open?' open':'');
+    var top='<div class="top"><span class="when">'+c.when+'</span><span class="tag">'+(open?'Deschis 💌':'🔒 Încuiat')+'</span></div>';
+    if(open) d.innerHTML=top+'<div class="msg">„'+c.msg+'”</div><div class="from">— '+c.from+'</div>';
+    else { if(!next && st.start){ d.classList.add('next'); next=true; }
+      d.innerHTML=top+'<div class="lock">De la '+c.from+'. '+(st.start?'Se deschide în <b data-h="'+c.h+'">'+dur(c.h*HOUR-e)+'</b>.':'Se deschide după ce semnezi pactul.')+'</div>'; }
+    box.appendChild(d);
+  });
+}
+
+/* ---------- HEALTH ---------- */
+var HEAL=[
+  {h:20/60,i:'❤️',t:'Pulsul și tensiunea scad',d:'după ~20 de minute'},
+  {h:12,i:'🫁',t:'Monoxidul de carbon din sânge revine la normal',d:'după ~12 ore'},
+  {h:48,i:'👃',t:'Gustul și mirosul încep să revină',d:'după ~2 zile'},
+  {h:72,i:'🌬️',t:'Respiri mai ușor, nicotina a ieșit din corp',d:'după ~3 zile'},
+  {h:14*24,i:'🩸',t:'Circulația și plămânii funcționează mai bine',d:'între 2 săptămâni și 3 luni'},
+  {h:90*24,i:'😮‍💨',t:'Tusea și lipsa de aer scad',d:'între 1 și 9 luni'},
+  {h:365*24,i:'💛',t:'Riscul de infarct scade cam la jumătate',d:'după 1 an'},
+  {h:5*365*24,i:'🧠',t:'Riscul de AVC scade mult, spre cel al unui nefumător',d:'după 5–15 ani'},
+  {h:10*365*24,i:'🛡️',t:'Riscul de cancer pulmonar scade cam la jumătate',d:'după 10 ani'}
+];
+function renderHeal(){
+  var e=el()/HOUR, box=$('heal'); box.innerHTML='';
+  HEAL.forEach(function(x){ var p=st.start?Math.min(1,e/x.h):0, done=p>=1, d=document.createElement('div');
+    d.className='h'+(done?' done':'');
+    d.innerHTML='<div class="dot">'+(done?'✓':x.i)+'</div><div><b>'+x.t+'</b><small>'+x.d+(st.start?(done?' · s-a întâmplat ✓':' · '+Math.floor(p*100)+'%'):'')+'</small><div class="mini"><i style="width:'+(p*100)+'%"></i></div></div>';
+    box.appendChild(d); });
+}
+
+/* ---------- DASHBOARD TICK ---------- */
+function tick(){
+  if(!st.start) return;
+  var e=el();
+  $('cD').textContent=Math.floor(e/DAY); $('cH').textContent=Math.floor(e%DAY/HOUR);
+  $('cM').textContent=Math.floor(e%HOUR/6e4); $('cS').textContent=Math.floor(e%6e4/1e3);
+  var cigs=Math.floor(e/DAY*C.perDay), lifeMin=cigs*17;
+  $('dCigs').textContent=fmt(cigs);
+  $('dLife').textContent= lifeMin>=1440? fmt(lifeMin/1440,1)+' zile' : lifeMin>=60? fmt(lifeMin/60,1)+' ore' : lifeMin+' min';
+  var p=Math.min(1,e/(C.pactDays*DAY)), daysLeft=Math.ceil((C.pactDays*DAY-e)/DAY);
+  $('roadDone').style.width=(p*100)+'%'; $('car').style.left='calc('+(p*100)+'% - '+(p*80)+'px)';
+  var saved=e/DAY*C.packPrice/C.eurRon;
+  $('mSaved').textContent=fmt(saved)+' €';
+  if(p>=1){ $('dusterTitle').textContent='Cheile sunt ale tale 🔑'; $('mGiftL').textContent='de la mine. Promisiunea e ținută'; $('dusterText').textContent='Ai reușit 6 luni. Suma totală pentru Duster: '+fmt(C.gift+saved)+' €. Hai să mergem să-l alegem.'; }
+  else { $('dusterTitle').textContent='Încă '+daysLeft+(daysLeft===1?' zi':' zile'); $('dusterText').textContent='La final: '+fmt(C.gift)+' € de la mine + ~'+fmt(Math.round(C.pactDays*C.packPrice/C.eurRon/50)*50)+' € din țigările nefumate = ~'+fmt(C.gift+Math.round(C.pactDays*C.packPrice/C.eurRon/50)*50)+' € pentru Duster.'; }
+  renderTarget(e); renderPhase(e);
+  var open=caps().filter(function(c){return e>=c.h*HOUR}).length;
+  if(open!==lastOpen){ renderCaps(); lastOpen=open; }
+  else document.querySelectorAll('#caps [data-h]').forEach(function(b){ b.textContent=dur(+b.dataset.h*HOUR-e); });
+  if(Math.floor(e/1000)%60===0) renderHeal();
+}
+
+function targets(){ return [{h:6,n:'6 ore'},{h:12,n:'12 ore'},{h:24,n:'O zi'},{h:48,n:'2 zile'},{h:72,n:'3 zile'},{h:120,n:'5 zile'},{h:168,n:'O săptămână'},{h:240,n:'10 zile'},{h:336,n:'2 săptămâni'},{h:504,n:'3 săptămâni'},{h:720,n:'O lună'},{h:1008,n:'6 săptămâni'},{h:1440,n:'2 luni'},{h:2160,n:'3 luni'},{h:2880,n:'4 luni'},{h:3600,n:'5 luni'},{h:C.pactDays*24,n:'6 luni · Duster'},{h:6552,n:'9 luni'},{h:8760,n:'Un an'},{h:17520,n:'2 ani'},{h:43800,n:'5 ani'}]; }
+var PHASES=[
+ {to:72, t:'Zilele 1–3: vârful', f:'Acum e cel mai greu. Nicotina iese din corp și creierul o cere. Poți fi nervos, agitat, cu capul greu. E normal și e semn că funcționează. Pofta vine în valuri de câteva minute, nu ține toată ziua.',
+  tips:['Bea multă apă și ține guma la îndemână','Evită azi cafeaua de dimineață pe balcon și locurile unde fumai','Apasă butonul roșu de fiecare dată când te trage, oricât de des']},
+ {to:168, t:'Prima săptămână: corpul se curăță', f:'Poftele încep să se rărească, dar pot fi încă puternice. Somnul poate fi dat peste cap și poți tuși mai mult: plămânii se curăță.',
+  tips:['Schimbă ritualurile: după masă te ridici imediat de la masă','Ieși la plimbare cu mami seara, în loc de țigara de seară','Spune-le colegilor și prietenilor că te-ai lăsat ca să nu-ți mai ofere']},
+ {to:336, t:'Săptămâna 2: nervii se liniștesc', f:'Cele mai multe simptome încep să scadă. Rămân pofte legate de situații: cafea, stres, o bere, un prieten care fumează. Acolo e capcana.',
+  tips:['Fă o listă cu 3 momente în care te trage cel mai tare și ce faci în loc','Pune deoparte banii pe țigări: se văd pe drumul spre Duster','Atenție la „doar una”: aproape întotdeauna devine pachetul']},
+ {to:720, t:'Săptămânile 3–4: devine mai ușor', f:'Simptomele de sevraj au trecut în mare parte. Poftele sunt mai rare și mai scurte. Poți simți că ți-e poftă de mâncare mai mult: e normal.',
+  tips:['Ai la îndemână semințe, morcovi, mere în loc de dulciuri','Mișcă-te zilnic 20 de minute, ajută și la nervi, și la greutate','Bifează luna întâi: ai făcut partea cea mai grea']},
+ {to:2160, t:'Lunile 2–3: capcana încrederii', f:'Acum mulți cred că „au scăpat” și că una nu strică. Poftele vin rar, dar pot veni pe neașteptate: la o petrecere, la un necaz, la o veste proastă.',
+  tips:['Pregătește-ți dinainte răspunsul: „Nu, mersi, m-am lăsat.”','La petreceri, ține mereu ceva în mână: un pahar cu apă, un suc','Dacă vine o zi grea, apasă butonul roșu înainte să ajungi la chioșc']},
+ {to:C.pactDays*24, t:'Până la 6 luni: drumul spre Duster', f:'Ești de acum nefumător. Poftele sunt rare și slabe. Respiri mai bine, urci scările mai ușor, mâncarea are gust.',
+  tips:['Numără zilele până la cheile Duster-ului','Fă-ți un obicei nou pe care să-l păstrezi: plimbarea, sala, pescuitul','Spune-i și altcuiva cum ai reușit. Ajută pe amândoi']},
+ {to:1e9, t:'Ești liber', f:'Mai poate veni o poftă din senin, rar, chiar și după un an. Nu înseamnă nimic: trece în câteva minute, ca înainte.',
+  tips:['Nu fuma „doar una”, nici peste 5 ani','Bucură-te de Duster și de noi','Ești dovada că se poate']}
+];
+function renderPhase(e){
+  var h=e/HOUR, i=0; while(i<PHASES.length-1 && h>=PHASES[i].to) i++;
+  var ph=PHASES[i]; if($('phTitle').dataset.i===String(i)) { $('phBar').style.width=Math.min(100,h/(C.pactDays*24)*100)+'%'; return; }
+  $('phTitle').dataset.i=String(i); $('phTitle').textContent=ph.t; $('phFeel').textContent=ph.f;
+  $('phTips').innerHTML=ph.tips.map(function(t){return '<div class="task"><span class="box" style="border-color:var(--gold)">→</span><span>'+t+'</span></div>'}).join('');
+  $('phBar').style.width=Math.min(100,h/(C.pactDays*24)*100)+'%';
+}
+var lastT='';
+function renderTarget(e){
+  var T=targets(), i=0; while(i<T.length && e>=T[i].h*HOUR) i++;
+  var cur=T[Math.min(i,T.length-1)], prev=i>0?T[i-1].h*HOUR:0, p=i>=T.length?1:(e-prev)/(cur.h*HOUR-prev);
+  $('ringArc').setAttribute('stroke-dashoffset',String(289*(1-p)));
+  $('ringPct').textContent=Math.floor(p*100)+'%';
+  $('tName').textContent=i>=T.length?'Liber de 5 ani 🏆':cur.n;
+  $('tLeft').textContent=i>=T.length?'Ai câștigat tot.':'Mai ai '+dur(cur.h*HOUR-e)+'. '+(i===0?'Primul obiectiv. Cel mai important.':'Ai bifat deja: '+T[i-1].n.toLowerCase()+'.');
+  $('winsN').textContent=st.wins||0;
+  var key=i+'';
+  if(key!==lastT){ lastT=key; $('chips').innerHTML=T.map(function(t,k){ return '<span class="chip'+(k<i?' ok':k===i?' now':'')+'">'+(k<i?'🏅 ':'')+t.n+'</span>'; }).join(''); }
+}
+
+function applyState(){
+  var signed=!!st.start;
+  $('dash').classList.toggle('hidden',!signed);
+  $('sosBtn').classList.toggle('hidden',!signed);
+  $('signBtn').classList.toggle('hidden',signed); $('signPick').classList.toggle('hidden',signed); $('pickBox').classList.add('hidden');
+  $('sigDad').classList.toggle('hidden',!signed); $('stamp').classList.toggle('hidden',!signed);
+  lastOpen=-1; renderCaps(); renderHeal(); tick(); observe();
+}
+
+/* ---------- SIGN ---------- */
+function sign(ts){ st.start=Math.min(ts,Date.now()); save(); applyState(); confetti();
+  setTimeout(function(){ $('dash').scrollIntoView({behavior:'smooth'}); },900); }
+$('signBtn').onclick=function(){ sign(Date.now()); };
+$('signPick').onclick=function(){ $('pickBox').classList.remove('hidden'); $('pickDate').value=toLocal(Date.now()-DAY); };
+$('pickGo').onclick=function(){ var v=new Date($('pickDate').value).getTime(); if(!isNaN(v)) sign(v); };
+function toLocal(ts){ var d=new Date(ts-new Date(ts).getTimezoneOffset()*6e4); return d.toISOString().slice(0,16); }
+function confetti(){ var cols=['#f5b94c','#ffdc93','#63d6a3','#86c8ff','#ff8378'];
+  for(var i=0;i<90;i++){ var c=document.createElement('div'); c.className='confetti';
+    c.style.left=Math.random()*100+'vw'; c.style.background=cols[i%cols.length];
+    c.style.animationDuration=(2.2+Math.random()*2)+'s'; c.style.animationDelay=(Math.random()*.6)+'s';
+    document.body.appendChild(c); setTimeout(function(x){return function(){x.remove()}}(c),5000); } }
+
+/* ---------- SOS ---------- */
+function quotes(){ var n=nepot(); return [
+  'Gândește-te la '+n+' alergând spre tine strigând „bunicuuu!”.',
+  'Fiecare țigară pe care n-o aprinzi îți dă înapoi vreo 17 minute de viață. Cu noi.',
+  'Pofta e ca un val: crește, ajunge sus, apoi se sparge. Tu doar stai în picioare.',
+  'Tată, vreau să-l ții în brațe pe copilul meu. Rezistă.',
+  'Ai rezistat deja de atâtea ori. Încă o dată.',
+  'Duster-ul te așteaptă. Și eu te aștept.',
+  'Mi-e destul de dor de '+C.grandpaName+'. Nu vreau să-mi fie dor și de tine.',
+  C.momName.charAt(0).toUpperCase()+C.momName.slice(1)+' vrea să îmbătrânească lângă tine. Nu singură.',
+  'Nu fuma pentru 3 minute. Doar atât îți cer acum.'
+];}
+var TASKS=['Bea un pahar mare de apă rece, încet','Fă 10 genuflexiuni, chiar acum','Ieși afară și fă o tură de 5 minute','Spală-te pe față cu apă rece','Mănâncă ceva crocant: un măr, un morcov, semințe','Pune o gumă în gură','Spală-te pe dinți (după, nu mai ai chef de țigară)','Scrie-i un mesaj frumos lui '+C.momName+', ca pe vremuri','Pune o melodie veche care-ți place și ascult-o toată','Strânge ceva în mână: o minge, un pix, cheile','Ridică-te și deschide geamul. Trage aer de 5 ori'];
+var sosI=null, brT=null;
+function sosView(v){
+  ['vMenu','vBreath','vScratch','vTask','vTalk'].forEach(function(id){ $(id).classList.toggle('hidden',id!==v); });
+  $('vFoot').classList.toggle('hidden',v==='vMenu');
+  stopBreath();
+  if(v==='vBreath') startBreath();
+  if(v==='vScratch') startScratch();
+  if(v==='vTask') startTasks();
+  if(v==='vTalk') startTalk();
+}
+function openSos(){
+  $('sosModal').classList.remove('hidden');
+  var q=quotes(); $('sosQuote').textContent=q[Math.floor(Math.random()*q.length)];
+  sosView('vMenu');
+}
+function closeSos(){ $('sosModal').classList.add('hidden'); stopBreath(); }
+function stopBreath(){ clearInterval(sosI); clearTimeout(brT); }
+function startBreath(){
+  var t=180; $('sosTimer').textContent='3:00';
+  sosI=setInterval(function(){ t--; if(t<=0){clearInterval(sosI); $('sosTimer').textContent='Ai reușit ✓'; return;} $('sosTimer').textContent=Math.floor(t/60)+':'+String(t%60).padStart(2,'0'); },1000);
+  var ph=0,b=$('breath'),bt=$('breathTxt'); b.style.transition='none'; b.style.transform='scale(.6)';
+  (function step(){ var k=ph%3;
+    if(k===0){ b.style.transition='transform 4s ease-in-out'; b.style.transform='scale(1)'; bt.textContent='Inspiră'; }
+    if(k===1){ bt.textContent='Ține'; }
+    if(k===2){ b.style.transition='transform 6s ease-in-out'; b.style.transform='scale(.6)'; bt.textContent='Expiră încet'; }
+    ph++; brT=setTimeout(step,[4000,4000,6000][k]); })();
+}
+function startScratch(){
+  var n=C.nepotName||'nepoțelul', fam=[C.momName, C.sonName||'fiul tău', 'fiica ta', n].join(', ');
+  $('scrMsg').innerHTML='Așa arată aerul fără fum, tată.<br>Te iubim.<small>— '+fam+'</small>';
+  var c=$('scr'), r=c.getBoundingClientRect(), d=devicePixelRatio||1;
+  c.width=r.width*d; c.height=r.height*d; var x=c.getContext('2d'); x.globalCompositeOperation='source-over';
+  var g=x.createLinearGradient(0,0,0,c.height); g.addColorStop(0,'#5d6475'); g.addColorStop(1,'#3d4352'); x.fillStyle=g; x.fillRect(0,0,c.width,c.height);
+  for(var i=0;i<70;i++){ x.fillStyle='rgba(200,205,215,'+(Math.random()*.18)+')'; x.beginPath(); x.arc(Math.random()*c.width,Math.random()*c.height,(20+Math.random()*60)*d,0,7); x.fill(); }
+  x.fillStyle='rgba(255,255,255,.75)'; x.font='700 '+(16*d)+'px Manrope,sans-serif'; x.textAlign='center'; x.fillText('Freacă aici ☝️',c.width/2,c.height/2);
+  x.globalCompositeOperation='destination-out';
+  var down=false, moves=0, done=false;
+  function rub(e){ if(!down||done) return; e.preventDefault(); var b=c.getBoundingClientRect(), px=(e.clientX-b.left)*d, py=(e.clientY-b.top)*d;
+    x.beginPath(); x.arc(px,py,28*d,0,7); x.fill(); if(++moves%15===0) check(); }
+  function check(){ var data=x.getImageData(0,0,c.width,c.height).data, clear=0, tot=0;
+    for(var i=3;i<data.length;i+=4*40){ tot++; if(data[i]<40) clear++; }
+    if(clear/tot>.6){ done=true; x.clearRect(0,0,c.width,c.height); } }
+  c.onpointerdown=function(e){ down=true; try{c.setPointerCapture(e.pointerId)}catch(_){} rub(e); };
+  c.onpointermove=rub; c.onpointerup=c.onpointercancel=function(){ down=false; };
+}
+function startTasks(){
+  var pool=TASKS.slice().sort(function(){return Math.random()-.5}).slice(0,3), box=$('tasks'); box.innerHTML='';
+  pool.forEach(function(t){ var d=document.createElement('div'); d.className='task'; d.innerHTML='<span class="box"></span><span>'+t+'</span>';
+    d.onclick=function(){ d.classList.toggle('done'); d.querySelector('.box').textContent=d.classList.contains('done')?'✓':''; }; box.appendChild(d); });
+}
+function startTalk(){
+  if(C.sonPhone){ $('callSon').classList.remove('hidden'); $('sosNum').textContent=C.sonPhone; $('callSon').href='tel:'+C.sonPhone.replace(/\s/g,''); }
+  else $('callSon').classList.add('hidden');
+  document.querySelectorAll('.sonN').forEach(function(x){x.textContent=C.sonName||'fiul tău'});
+}
+document.querySelectorAll('.opt').forEach(function(b){ b.onclick=function(){ sosView(b.dataset.v); }; });
+$('sosBtn').onclick=openSos;
+$('sosClose').onclick=closeSos;
+$('sosBack').onclick=function(){ sosView('vMenu'); };
+$('sosWin').onclick=function(){ st.wins=(st.wins||0)+1; save(); closeSos(); confetti(); tick(); };
+
+/* ---------- SLIP ---------- */
+$('slipBtn').onclick=function(){ $('slipModal').classList.remove('hidden'); };
+$('slipKeep').onclick=function(){ $('slipModal').classList.add('hidden'); };
+$('slipReset').onclick=function(){ st.start=Date.now(); save(); $('slipModal').classList.add('hidden'); applyState(); };
+
+/* ---------- SETTINGS ---------- */
+$('settingsBtn').onclick=function(){
+  $('sDadAt').value=C.dadAtBirth; $('sSon').value=C.sonAge; $('sSonName').value=C.sonName; $('sNepot').value=C.nepotName;
+  $('sNepotAge').value=C.nepotAge; $('sPhone').value=C.sonPhone; $('sStart').value=st.start?toLocal(st.start):'';
+  $('setModal').classList.remove('hidden'); };
+$('setClose').onclick=function(){ $('setModal').classList.add('hidden'); };
+$('setSave').onclick=function(){
+  var cfg=st.cfg||{}, num=function(id){var v=parseFloat($(id).value);return isNaN(v)?undefined:v};
+  if(num('sDadAt')) cfg.dadAtBirth=num('sDadAt'); if(num('sSon')) cfg.sonAge=num('sSon');
+  cfg.sonName=$('sSonName').value.trim(); cfg.nepotName=$('sNepot').value.trim(); cfg.sonPhone=$('sPhone').value.trim();
+  if(num('sNepotAge')!==undefined) cfg.nepotAge=num('sNepotAge');
+  var s=new Date($('sStart').value).getTime(); if(!isNaN(s)) st.start=Math.min(s,Date.now());
+  st.cfg=cfg; save(); setC();
+  $('setModal').classList.add('hidden'); renderStory(); applyState(); };
+$('setWipe').onclick=function(){ st={}; save(); try{localStorage.removeItem(KEY)}catch(e){} setC(); $('setModal').classList.add('hidden'); renderStory(); applyState(); };
+
+/* ---------- VISUAL FX ---------- */
+var io;
+function observe(){
+  if(!('IntersectionObserver' in window)){ document.querySelectorAll('.reveal').forEach(function(r){r.classList.add('in')}); fillBars(document); return; }
+  if(!io) io=new IntersectionObserver(function(es){ es.forEach(function(x){ if(x.isIntersecting){ x.target.classList.add('in'); fillBars(x.target); io.unobserve(x.target);} }); },{threshold:.15});
+  document.querySelectorAll('.reveal:not(.in)').forEach(function(r){ io.observe(r); });
+}
+function fillBars(root){ root.querySelectorAll('[data-w]').forEach(function(i){ setTimeout(function(){ i.style.width=i.dataset.w+'%'; },150); }); }
+
+// intro letter, line by line
+document.querySelectorAll('#intro .line').forEach(function(l){ setTimeout(function(){ l.classList.add('show'); }, +l.dataset.d); });
+setTimeout(function(){ $('cue').classList.add('show'); }, 10400);
+
+// night → dawn
+function onScroll(){ var h=document.documentElement, p=h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight); document.documentElement.style.setProperty('--p',p.toFixed(3)); }
+window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+
+// stars
+(function(){ var c=$('stars'), x=c.getContext('2d'), s=[];
+  function size(){ c.width=innerWidth*devicePixelRatio; c.height=innerHeight*devicePixelRatio; s=[];
+    for(var i=0;i<110;i++) s.push({x:Math.random()*c.width,y:Math.random()*c.height*.8,r:Math.random()*1.3*devicePixelRatio+.3,t:Math.random()*6}); }
+  size(); addEventListener('resize',size);
+  (function draw(){ x.clearRect(0,0,c.width,c.height);
+    s.forEach(function(p){ p.t+=.02; x.globalAlpha=.35+.35*Math.sin(p.t); x.fillStyle='#fff'; x.beginPath(); x.arc(p.x,p.y,p.r,0,7); x.fill(); });
+    requestAnimationFrame(draw); })();
+})();
+
+window.addEventListener('hashchange',function(){ location.reload(); });
+renderStory(); applyState();
+setInterval(tick,1000);
+})();
+</script>
+</body>
+</html>
