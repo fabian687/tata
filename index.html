@@ -59,6 +59,35 @@ section{padding:64px 0 8px}
 .mega{font:800 92px/1 Fraunces,serif;letter-spacing:-.03em;background:linear-gradient(180deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
 .mega small{font-size:30px}
 
+/* LIFE */
+.tile .min{display:block;font-style:normal;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:800}
+.agePick{margin-top:20px;padding:16px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.ageLab{font-size:16px;font-weight:700;text-align:center}
+.ageLab b{font:800 28px Fraunces,serif;color:var(--gold2);padding:0 4px}
+.agePick input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:9px;background:linear-gradient(90deg,#3ddc84,#f5b94c,#ff5c5c);margin:14px 0 6px;padding:0;border:0}
+.agePick input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.4);cursor:pointer}
+.agePick input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:#fff;border:0}
+.ageTicks{display:flex;justify-content:space-between;font-size:11px;color:var(--dim)}
+.crowds{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.crowd{border-radius:18px;padding:14px 12px;border:1px solid}
+.crowd.red{background:rgba(255,92,92,.08);border-color:rgba(255,92,92,.35)}
+.crowd.green{background:rgba(61,220,132,.08);border-color:rgba(61,220,132,.35)}
+.crowd .ch{font-size:13px;font-weight:800;display:flex;align-items:center;gap:6px}
+.crowd .dotk{width:10px;height:10px;border-radius:50%}
+.crowd.red .dotk{background:#ff5c5c}.crowd.green .dotk{background:#3ddc84}
+.crowd .big{font:800 46px/1 Fraunces,serif;margin-top:8px;font-variant-numeric:tabular-nums}
+.crowd.red .big{color:#ff7a7a}.crowd.green .big{color:#5fe39b}
+.crowd .sub{font-size:12px;color:var(--mute);margin:2px 0 10px}
+.grid100{display:grid;grid-template-columns:repeat(10,1fr);gap:3px}
+.grid100 i{aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.08);transition:background .35s,transform .35s}
+.crowd.red .grid100 i.on{background:#ff5c5c}
+.crowd.green .grid100 i.on{background:#3ddc84}
+.grid100 i.off{transform:scale(.6)}
+.diff{margin-top:12px;text-align:center;font-family:Fraunces,serif;font-size:19px;line-height:1.4;padding:14px;border-radius:16px;background:linear-gradient(90deg,rgba(255,92,92,.10),rgba(61,220,132,.12))}
+.diff b{color:#5fe39b}
+#lifeChart{width:100%;height:auto;display:block;margin-top:6px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--mute);margin-top:8px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-2px}
 /* LIFE RIBBON */
 .ribbon{margin-top:18px}
 .ribbon .lab{display:flex;justify-content:space-between;font-size:13px;color:var(--mute);margin:14px 0 6px}
@@ -289,15 +318,35 @@ footer a{color:var(--mute)}
     <p class="mute" style="margin-top:10px">Cel mai mare studiu de până acum pe tema asta (New England Journal of Medicine, peste 200.000 de oameni) a arătat că fumătorii pierd în medie peste 10 ani de viață, și că o bună parte din ei se recuperează la orice vârstă la care te lași.</p>
   </div>
 
-  <div class="card reveal ribbon" style="margin-top:22px">
+  <div class="card reveal life" style="margin-top:22px">
     <div class="eyebrow">Viața ta, în două variante</div>
-    <p class="mute" style="font-size:14px">Cât de tare e banda arată cât de probabil e să mai fii acolo, la fiecare vârstă.</p>
-    <div class="lab"><span>Dacă fumezi în continuare</span><b id="rS">~73 ani</b></div>
-    <svg id="ribS" viewBox="0 0 500 34"></svg>
-    <div class="lab"><span>Dacă te lași de acum</span><b class="gold" id="rQ">~77 ani</b></div>
-    <svg id="ribQ" viewBox="0 0 500 34"></svg>
-    <div class="axis" id="axis"></div>
-    <p class="note">Steluțele sunt momentele de mai jos. Cifrele de la capăt sunt vârsta până la care trăiește jumătate dintre oamenii în situația ta.</p>
+    <h2 style="font-size:25px">Nimeni nu știe câți ani vei trăi.<br><span class="mute" style="font-size:20px">Dar țigara mută șansele. Mult.</span></h2>
+    <p class="mute" style="margin-top:10px;font-size:15px">Nu e o dată fixă. Unii fumători trec de 80, unii nefumători pleacă devreme. Dar uite ce se întâmplă cu 100 de bărbați exact ca tine: <span id="lpMe">46</span> de ani, cu stent.</p>
+
+    <div class="agePick">
+      <div class="ageLab">Câți ajung la <b id="lpAge">70</b> de ani?</div>
+      <input type="range" id="lpSlider" min="50" max="90" step="1" value="70" aria-label="Alege vârsta">
+      <div class="ageTicks"><span>50</span><span>60</span><span>70</span><span>80</span><span>90</span></div>
+    </div>
+
+    <div class="crowds">
+      <div class="crowd red">
+        <div class="ch"><span class="dotk"></span>Dacă fumezi</div>
+        <div class="big" id="lpS">32</div><div class="sub">din 100 mai sunt aici</div>
+        <div class="grid100" id="gS"></div>
+      </div>
+      <div class="crowd green">
+        <div class="ch"><span class="dotk"></span>Dacă te lași</div>
+        <div class="big" id="lpQ">55</div><div class="sub">din 100 mai sunt aici</div>
+        <div class="grid100" id="gQ"></div>
+      </div>
+    </div>
+    <div class="diff" id="lpDiff"></div>
+
+    <div class="eyebrow" style="margin-top:26px">Toată curba</div>
+    <svg id="lifeChart" viewBox="0 0 500 270" aria-hidden="true"></svg>
+    <div class="legend"><span><i style="background:#ff5c5c"></i>Fumând</span><span><i style="background:#3ddc84"></i>Fără țigări</span><span><i style="background:rgba(61,220,132,.28)"></i>Anii pe care îi câștigi</span></div>
+    <p class="note">Curba arată câți din 100 mai trăiesc la fiecare vârstă. Linia punctată e vârsta la care jumătate dintre ei mai sunt în viață: <b style="color:#ff8a8a" id="rS">~65</b> fumând, <b style="color:#5fe39b" id="rQ">~71</b> fără țigări. Nu e vârsta la care „mori”. E doar mijlocul.</p>
   </div>
 </section>
 
@@ -308,10 +357,10 @@ footer a{color:var(--mute)}
     <h2>Nu sunt cifre.<br>Sunt mesele noastre de duminică.</h2>
   </div>
   <div class="grid2 reveal">
-    <div class="tile"><b id="g1">4</b><span>Crăciunuri în plus, toți la aceeași masă</span></div>
-    <div class="tile"><b id="g2">208</b><span>duminici în plus în care vin la tine</span></div>
-    <div class="tile"><b id="g3">8</b><span>zile de naștere ale nepoților, la care tu sufli lumânările cu ei</span></div>
-    <div class="tile"><b id="g4">1.460</b><span>dimineți în plus în care te trezești și respiri ușor</span></div>
+    <div class="tile"><em class="min">minim</em><b id="g1">4</b><span>Crăciunuri în plus, toți la aceeași masă</span></div>
+    <div class="tile"><em class="min">minim</em><b id="g2">208</b><span>duminici în plus în care vin la tine</span></div>
+    <div class="tile"><em class="min">minim</em><b id="g3">8</b><span>zile de naștere ale nepoților, la care tu sufli lumânările cu ei</span></div>
+    <div class="tile"><em class="min">minim</em><b id="g4">1.460</b><span>dimineți în plus în care te trezești și respiri ușor</span></div>
   </div>
 </section>
 
@@ -600,18 +649,43 @@ function moments(){
 }
 
 /* ---------- RENDER STORY ---------- */
-function ribbon(svgId,m,events){
-  var svg=$(svgId), a0=C.dadAge, a1=100, W=500, H=34, id='g'+svgId;
-  var stops='';
-  for(var x=0;x<=40;x++){ var age=a0+(a1-a0)*x/40, p=surv(a0,age-a0,m);
-    stops+='<stop offset="'+(x/40)+'" stop-color="'+(svgId==='ribQ'?'#f5b94c':'#8a90a3')+'" stop-opacity="'+p.toFixed(3)+'"/>'; }
-  var pins='';
-  events.forEach(function(e){ var x=(e.age-a0)/(a1-a0)*W; if(x<W) pins+='<text x="'+x+'" y="11" font-size="12" text-anchor="middle" fill="'+(svgId==='ribQ'?'#ffdc93':'#aab3c5')+'">✦</text>'; });
-  var med=(svgId==='ribQ'?M.medQ:M.medS), mx=(med-a0)/(a1-a0)*W;
-  svg.innerHTML='<defs><linearGradient id="'+id+'">'+stops+'</linearGradient></defs>'+
-    '<rect x="0" y="14" width="'+W+'" height="16" rx="8" fill="rgba(255,255,255,.05)"/>'+
-    '<rect x="0" y="14" width="'+W+'" height="16" rx="8" fill="url(#'+id+')"/>'+
-    '<line x1="'+mx+'" x2="'+mx+'" y1="12" y2="32" stroke="#fff" stroke-width="2" stroke-dasharray="2 2" opacity=".7"/>'+pins;
+function crowdGrid(id){ var g=$(id); if(g.children.length) return; var h=''; for(var i=0;i<100;i++) h+='<i></i>'; g.innerHTML=h; }
+function setAge(age){
+  var ps=surv(C.dadAge,age-C.dadAge,M.ms), pq=surv(C.dadAge,age-C.dadAge,M.mq);
+  var nS=Math.round(ps*100), nQ=Math.round(pq*100);
+  $('lpAge').textContent=age; $('lpS').textContent=nS; $('lpQ').textContent=nQ;
+  [['gS',nS],['gQ',nQ]].forEach(function(x){ var k=$(x[0]).children; for(var i=0;i<100;i++){ k[i].className=i<x[1]?'on':'off'; } });
+  var d=nQ-nS;
+  $('lpDiff').innerHTML= d>0 ? 'La '+age+' de ani, lăsatul de fumat ține în viață încă <b>'+d+' oameni din 100</b>.<br><span style="font-size:15px" class="mute">Tu poți fi unul dintre ei.</span>' : 'La '+age+' de ani, diferența e mică. Dar până acolo, fiecare an contează.';
+  drawChart(age);
+}
+function drawChart(cur){
+  var a0=C.dadAge, a1=100, W=500, H=270, L=34, R=10, T=14, B=34, w=W-L-R, h=H-T-B;
+  var X=function(a){return L+(a-a0)/(a1-a0)*w}, Y=function(p){return T+(1-p)*h};
+  var ptsS=[],ptsQ=[];
+  for(var a=a0;a<=a1;a+=.5){ ptsS.push([X(a),Y(surv(a0,a-a0,M.ms))]); ptsQ.push([X(a),Y(surv(a0,a-a0,M.mq))]); }
+  var line=function(p){return p.map(function(q,i){return (i?'L':'M')+q[0].toFixed(1)+' '+q[1].toFixed(1)}).join(' ')};
+  var gap=line(ptsQ)+' '+ptsS.slice().reverse().map(function(q){return 'L'+q[0].toFixed(1)+' '+q[1].toFixed(1)}).join(' ')+'Z';
+  var areaS=line(ptsS)+' L'+X(a1)+' '+Y(0)+' L'+X(a0)+' '+Y(0)+'Z';
+  var grid='';
+  [0,.25,.5,.75,1].forEach(function(p){ grid+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(p)+'" y2="'+Y(p)+'" stroke="rgba(255,255,255,.07)"/><text x="'+(L-6)+'" y="'+(Y(p)+4)+'" font-size="11" fill="#6f7a91" text-anchor="end">'+Math.round(p*100)+'</text>'; });
+  [50,60,70,80,90,100].forEach(function(a){ if(a>a0) grid+='<text x="'+X(a)+'" y="'+(H-12)+'" font-size="11" fill="#6f7a91" text-anchor="middle">'+a+'</text>'; });
+  grid+='<text x="'+X(a0)+'" y="'+(H-12)+'" font-size="11" fill="#aab3c5" text-anchor="middle">azi</text>';
+  var med=function(m,c,lab,dy){ var x=X(m); return '<line x1="'+x+'" x2="'+x+'" y1="'+Y(.5)+'" y2="'+Y(0)+'" stroke="'+c+'" stroke-dasharray="3 4" stroke-width="1.5"/><circle cx="'+x+'" cy="'+Y(.5)+'" r="4" fill="'+c+'"/><text x="'+x+'" y="'+(Y(.5)+dy)+'" font-size="12" font-weight="800" fill="'+c+'" text-anchor="middle">'+lab+'</text>'; };
+  var cx=X(cur), ys=Y(surv(a0,cur-a0,M.ms)), yq=Y(surv(a0,cur-a0,M.mq));
+  var gapMidA=(M.medS+M.medQ)/2;
+  $('lifeChart').innerHTML='<defs><linearGradient id="gR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5c5c" stop-opacity=".28"/><stop offset="1" stop-color="#ff5c5c" stop-opacity="0"/></linearGradient>'+
+    '<pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="rgba(61,220,132,.16)"/><line x1="0" y1="0" x2="0" y2="7" stroke="rgba(61,220,132,.45)" stroke-width="2"/></pattern></defs>'+
+    grid+
+    '<path d="'+areaS+'" fill="url(#gR)"/>'+
+    '<path d="'+gap+'" fill="url(#hatch)"/>'+
+    '<path d="'+line(ptsS)+'" fill="none" stroke="#ff5c5c" stroke-width="3" stroke-linecap="round"/>'+
+    '<path d="'+line(ptsQ)+'" fill="none" stroke="#3ddc84" stroke-width="3" stroke-linecap="round"/>'+
+    med(M.medS,'#ff7a7a','~'+Math.round(M.medS),-10)+med(M.medQ,'#5fe39b','~'+Math.round(M.medQ),-10)+
+    '<text x="'+X(gapMidA+4)+'" y="'+Y(.62)+'" font-size="12" font-weight="800" fill="#5fe39b">anii câștigați</text>'+
+    '<line x1="'+cx+'" x2="'+cx+'" y1="'+T+'" y2="'+Y(0)+'" stroke="rgba(255,255,255,.55)" stroke-width="1.5"/>'+
+    '<circle cx="'+cx+'" cy="'+ys+'" r="6" fill="#ff5c5c" stroke="#0b1020" stroke-width="2"/>'+
+    '<circle cx="'+cx+'" cy="'+yq+'" r="6" fill="#3ddc84" stroke="#0b1020" stroke-width="2"/>';
 }
 
 function renderStory(){
@@ -627,9 +701,9 @@ function renderStory(){
   $('ageTxt').textContent=C.dadAge;
   document.querySelectorAll('.gainWord').forEach(function(e){e.textContent=g+(g===1?' an':' ani')});
   $('g1').textContent=fmt(g); $('g2').textContent=fmt(g*52); $('g3').textContent=fmt(g*2); $('g4').textContent=fmt(g*365);
-  $('rS').textContent='~'+Math.round(M.medS)+' ani'; $('rQ').textContent='~'+Math.round(M.medQ)+' ani';
-  ribbon('ribS',M.ms,ev); ribbon('ribQ',M.mq,ev);
-  var ax=''; [C.dadAge,70,80,90,100].forEach(function(a,i){ if(i===0||a>C.dadAge+4) ax+='<span>'+a+'</span>'; }); $('axis').innerHTML=ax;
+  $('rS').textContent='~'+Math.round(M.medS)+' de ani'; $('rQ').textContent='~'+Math.round(M.medQ)+' de ani';
+  $('lpMe').textContent=C.dadAge; crowdGrid('gS'); crowdGrid('gQ'); setAge(+$('lpSlider').value);
+  $('lpSlider').oninput=function(){ setAge(+this.value); };
 
   // the hard truth
   var sonAtS=Math.round(C.sonAge+(M.medS-C.dadAge)), sonAtQ=Math.round(C.sonAge+(M.medQ-C.dadAge));
