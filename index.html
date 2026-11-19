@@ -24,7 +24,7 @@ html,body{margin:0;color:var(--ink);font-family:Manrope,system-ui,sans-serif;-we
   hsl(calc(232 - var(--p,0)*205),40%,calc(12% + var(--p,0)*14%)) 60%,
   hsl(calc(250 - var(--p,0)*215),45%,calc(16% + var(--p,0)*22%)) 100%)}
 #stars{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:calc(1 - var(--p,0)*1.3)}
-.wrap{max-width:600px;margin:0 auto;padding:0 18px 130px}
+.wrap{max-width:600px;margin:0 auto;padding:0 18px 150px}
 h1,h2,h3{font-family:Fraunces,Georgia,serif;margin:0;font-weight:600;letter-spacing:-.01em}
 h2{font-size:30px;line-height:1.12}
 p{line-height:1.6;margin:0}
@@ -193,8 +193,8 @@ section{padding:64px 0 8px}
 .bigcall{display:block;padding:16px;border-radius:16px;background:rgba(134,200,255,.12);border:1px solid rgba(134,200,255,.35);text-decoration:none;color:var(--ink);font-weight:700;margin:12px 0}
 /* FAB */
 .fab{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:5;width:calc(100% - 28px);max-width:560px;display:flex;gap:8px}
-.fab .sos{position:static;transform:none;width:auto;flex:1.2;max-width:none}
-.todo{flex:1;border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:15px 10px;font:800 15px Manrope;color:var(--ink);background:rgba(22,29,46,.92);backdrop-filter:blur(8px);cursor:pointer}
+.fab .sos{position:static;transform:none;width:auto;flex:1;max-width:none;padding:19px 10px}
+.todo{flex:1.2;border:1px solid rgba(245,185,76,.55);border-radius:18px;padding:19px 10px;font:800 17px Manrope,system-ui,sans-serif;box-shadow:0 10px 28px rgba(0,0,0,.35);color:var(--ink);background:rgba(22,29,46,.92);backdrop-filter:blur(8px);cursor:pointer}
 .todoGroup{margin-top:16px}
 .todoGroup h3{font:800 13px Manrope;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
 /* SOS */
@@ -314,7 +314,7 @@ footer a{color:var(--mute)}
   <div class="reveal">
     <div class="eyebrow">Ce câștigi dacă te lași acum</div>
     <div class="mega"><span id="gainBig">+4</span><small> ani</small></div>
-    <p style="font-size:19px;margin-top:10px" class="serif">Atât îți dă înapoi, în medie, renunțarea la fumat la <span id="ageTxt">55</span> de ani. Ani întregi, nu zile.</p>
+    <p style="font-size:19px;margin-top:10px" class="serif">Atât îți dă înapoi, minim, renunțarea la fumat la <span id="ageTxt">55</span> de ani, pentru cineva cu inima ta. Ani întregi, nu zile.</p>
     <p class="mute" style="margin-top:10px">Cel mai mare studiu de până acum pe tema asta (New England Journal of Medicine, peste 200.000 de oameni) a arătat că fumătorii pierd în medie peste 10 ani de viață, și că o bună parte din ei se recuperează la orice vârstă la care te lași.</p>
   </div>
 
@@ -408,7 +408,7 @@ footer a{color:var(--mute)}
   <div class="reveal">
     <div class="eyebrow">Și acum, partea frumoasă</div>
     <h2>Pactul nostru</h2>
-    <p class="mute" style="margin-top:8px">Știu că ți-ai dorit Duster-ul. Așa că hai să facem o înțelegere, între noi doi.</p>
+    <p class="mute" style="margin-top:8px">Știu că mi-ai zis de un Duster. Așa că hai să facem o înțelegere, între noi doi.</p>
   </div>
   <div class="gap"></div>
   <div class="pact reveal">
@@ -440,7 +440,7 @@ footer a{color:var(--mute)}
   <div class="reveal">
     <div class="eyebrow">Capsule de timp</div>
     <h2>Mesaje care te așteaptă</h2>
-    <p class="mute" style="margin-top:8px">Fiecare se deschide doar când ajungi la el, numărat de la semnarea pactului. Nu poți trișa.</p>
+    <p class="mute" style="margin-top:8px">Se deschid unul câte unul, la câteva zile distanță, numărate din momentul în care semnezi pactul: ziua 1, 3, 5, o săptămână… Nu poți trișa și nu le poți deschide pe toate odată.</p>
   </div>
   <div class="caps" id="caps"></div>
 </section>
@@ -460,7 +460,7 @@ footer a{color:var(--mute)}
   <div class="card reveal">
     <div class="eyebrow">Nu trebuie să o faci doar pe voință</div>
     <h2>Arme adevărate</h2>
-    <p style="margin-top:10px">Voința singură e cea mai grea cale. Plasturii sau guma cu nicotină și pastilele pe care le prescrie medicul cresc mult șansele, mai ales dacă le combini cu consiliere.</p>
+    <p style="margin-top:10px">Voința singură e cea mai grea cale. Plasturii sau guma cu nicotină și pastilele pe care le prescrie medicul cresc mult șansele.</p>
     <div class="row" style="margin-top:16px">
       <button class="btn ghost small" id="slipBtn">Am fumat una…</button>
     </div>
@@ -470,7 +470,7 @@ footer a{color:var(--mute)}
 <footer>
   <p><b>De unde vin cifrele</b></p>
   <p>Ani de viață pierduți și recuperați: Jha et al., <a href="https://www.nejm.org/doi/full/10.1056/NEJMsa1211128">„21st-Century Hazards of Smoking and Benefits of Cessation”</a>, NEJM 2013. Cine se lasă între 35 și 44 de ani recuperează ~9 ani, între 45 și 54 ~6 ani, între 55 și 64 ~4 ani; după 65 de ani, estimări de ~1–2 ani (Taylor et al., 2002). Riscul de deces la bărbații fumători: de 2,8 ori mai mare.</p>
-  <p>Inimă: Critchley & Capewell, JAMA 2003 (−36% mortalitate la bolnavii coronarieni care se lasă); DECADE, JACC Cardiovascular Interventions 2025 (risc de infarct +60% la fumători după stent, între anul 1 și 10); studiu pe pacienți cu infarct înainte de 50 de ani (mortalitate cu ~65% mai mică la cei care s-au lăsat). Pentru boala de inimă, modelul dublează riscul de bază, în ambele variante.</p>
+  <p>Inimă: Critchley & Capewell, JAMA 2003 (−36% mortalitate la bolnavii coronarieni care se lasă); DECADE, JACC Cardiovascular Interventions 2025 (risc de infarct +60% la fumători după stent, între anul 1 și 10); studiu pe pacienți cu infarct înainte de 50 de ani (mortalitate cu ~65% mai mică la cei care s-au lăsat). Pentru boala de inimă, modelul dublează riscul de bază, iar diferența dintre cine fumează și cine se lasă e luată din studiul pe pacienții cu infarct înainte de 50 de ani.</p>
   <p>17 minute pe țigară, la bărbați: University College London, revista Addiction, 2025.</p>
   <p>Speranța de viață în România, 2024: 80,4 ani la femei, 72,8 ani la bărbați (raportul UE privind sănătatea în România). Mortalitatea bărbaților din România: Eurostat/INS (speranța de viață la 65 de ani: ~15 ani). Șansele sunt calculate cu un model statistic simplificat. Sunt medii, nu predicții individuale.</p>
   <p style="margin-top:14px">Făcut cu dragoste de fiul tău. <button class="linkish" id="settingsBtn">Setări</button></p>
@@ -599,7 +599,7 @@ var st = load();
 function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ return {}; } }
 function save(){ if(demo) return; try{ localStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} }
 var C; function setC(){ C=Object.assign({}, CONFIG, st.cfg||{}); C.dadAge=new Date().getFullYear()-C.dadBirthYear; C.sonAge=C.dadAge-C.dadAtBirth; } setC();
-if(demo){ st={start:Date.now()-40*DAY-5*HOUR}; document.getElementById('demoBanner').classList.remove('hidden'); }
+if(demo){ st={start:Date.now()-40*DAY-5*HOUR, signed:Date.now()-40*DAY-5*HOUR}; document.getElementById('demoBanner').classList.remove('hidden'); }
 
 var $=function(id){return document.getElementById(id)};
 var fmt=function(n,d){return Number(n).toLocaleString('ro-RO',{minimumFractionDigits:d||0,maximumFractionDigits:d||0})};
@@ -626,7 +626,7 @@ function median(age,m){ var t=0; while(surv(age,t,m)>.5 && t<70) t+=.05; return 
 var M = {};
 function computeModel(){
   var H=C.heartFactor||1;
-  M.age=C.dadAge; M.ms=HR*H; M.mq=solveM(C.dadAge)*H; M.gain=gainFor(C.dadAge);
+  M.age=C.dadAge; M.mq=solveM(C.dadAge)*H; M.ms=(C.heartFactor>1? M.mq/0.35 : HR); M.gain=Math.max(gainFor(C.dadAge),Math.floor(le(C.dadAge,M.mq)-le(C.dadAge,M.ms)));
   M.medS=median(C.dadAge,M.ms); M.medQ=median(C.dadAge,M.mq);
 }
 
@@ -656,7 +656,7 @@ function setAge(age){
   $('lpAge').textContent=age; $('lpS').textContent=nS; $('lpQ').textContent=nQ;
   [['gS',nS],['gQ',nQ]].forEach(function(x){ var k=$(x[0]).children; for(var i=0;i<100;i++){ k[i].className=i<x[1]?'on':'off'; } });
   var d=nQ-nS;
-  $('lpDiff').innerHTML= d>0 ? 'La '+age+' de ani, lăsatul de fumat ține în viață încă <b>'+d+' oameni din 100</b>.<br><span style="font-size:15px" class="mute">Tu poți fi unul dintre ei.</span>' : 'La '+age+' de ani, diferența e mică. Dar până acolo, fiecare an contează.';
+  $('lpDiff').innerHTML= d>0 ? 'La '+age+' de ani, lăsatul de fumat ține în viață încă <b>'+d+(d%100>=20?' de':'')+' oameni din 100</b>.<br><span style="font-size:15px" class="mute">Tu poți fi unul dintre ei.</span>' : 'La '+age+' de ani, diferența e mică. Dar până acolo, fiecare an contează.';
   drawChart(age);
 }
 function drawChart(cur){
@@ -709,9 +709,9 @@ function renderStory(){
   var sonAtS=Math.round(C.sonAge+(M.medS-C.dadAge)), sonAtQ=Math.round(C.sonAge+(M.medQ-C.dadAge));
   var kidAtS=Math.round(M.medS-C.dadAge-C.sonFirstChildIn), kidAtQ=Math.round(M.medQ-C.dadAge-C.sonFirstChildIn);
   var nAtS=Math.round(C.nepotAge+(M.medS-C.dadAge)), nAtQ=Math.round(C.nepotAge+(M.medQ-C.dadAge));
-  $('hardText').innerHTML='Dacă fumezi în continuare, statistic, cel mai probabil n-o să mă mai vezi după ce împlinesc <em>'+ani(sonAtS)+'</em>.<br><br>Dacă te lași, poți să fii lângă mine și când am <strong>'+sonAtQ+'</strong>.';
+  $('hardText').innerHTML='Dacă fumezi în continuare, statistic, cel mai probabil n-o să mă mai vezi după ce împlinesc <em>'+ani(sonAtS)+'</em>.<br><br>Dacă te lași, poți să fii lângă mine și când am <strong>minim '+ani(sonAtQ)+'</strong>.';
   var kidS = kidAtS>0 ? 'Copilul meu ar rămâne fără bunic la doar <b class="rose">'+ani(kidAtS)+'</b>.' : 'Copilul meu s-ar putea să nu te cunoască deloc.';
-  $('hardText2').innerHTML=kidS+' Fără țigări, ar avea <b class="gold">'+ani(Math.max(kidAtQ,0))+'</b>: destul de mare cât să te țină minte toată viața. Iar '+nepot()+' ar avea <b class="rose">'+ani(nAtS)+'</b> față de <b class="gold">'+ani(nAtQ)+'</b>.';
+  $('hardText2').innerHTML=kidS+' Fără țigări, ar avea <b class="gold">minim '+ani(Math.max(kidAtQ,0))+'</b>: destul de mare cât să te țină minte toată viața. Iar '+nepot()+' ar avea <b class="rose">'+ani(nAtS)+'</b> față de <b class="gold">minim '+ani(nAtQ)+'</b>.';
 
   // moments
   var box=$('moments'); box.innerHTML='';
@@ -731,9 +731,11 @@ function renderStory(){
 function caps(){ var n=nepot(), N=n.charAt(0).toUpperCase()+n.slice(1); return [
   {h:24, when:'Ziua 1', from:sonN(), msg:'Prima zi s-a terminat. Știu că te-a tras de o sută de ori. Și n-ai cedat. Tată, sunt mândru de tine. Și abia am început.'},
   {h:72, when:'Ziua 3', from:sonN(), msg:'Azi e de obicei cea mai grea zi. Nicotina iese din corp și de-asta te strânge atât de tare. Dacă treci de azi, ai trecut de vârf. De mâine începe să fie mai ușor. Promit.'},
+  {h:5*24, when:'Ziua 5', from:sonN(), msg:'Cinci zile, tată. Ai trecut de vârf. De acum poftele vin mai rar și pleacă mai repede. Știu că pare mic, dar pentru mine e enorm. Sunt mândru de tine.'},
   {h:7*24, when:'O săptămână', from:'fiica ta', msg:'Tati, a aflat toată lumea. Toți sunt cu ochii pe tine, dar cu drag. '+N+' te întreabă mereu. Te iubim.'},
   {h:10*24, when:'Zece zile', from:C.momName, msg:'Dragul meu, de zece zile casa miroase altfel. Tu miroși altfel. Și te văd mai liniștit decât credeam. Nu ți-am zis-o de mult: sunt mândră de tine. Vreau să mai avem mulți ani doar ai noștri.'},
   {h:14*24, when:'Două săptămâni', from:N+' (cu ajutorul mamei)', msg:'Bunicuuu! Vreau să alergi după mine prin curte și să nu obosești. Și să mă iei în brațe sus, sus de tot! Pup!'},
+  {h:21*24, when:'3 săptămâni', from:sonN(), msg:'Trei săptămâni. Se spune că după 21 de zile un obicei nou începe să se lege. Deci de acum ești un om care nu fumează. Și te văd mai liniștit, mai vesel. Mulțumesc.'},
   {h:30*24, when:'O lună', from:sonN(), msg:'O lună întreagă. Asta înseamnă un singur lucru: că poți. Nu mai e o încercare, e cine ești acum. Mai sunt 5 luni până la Duster.'},
   {h:90*24, when:'Trei luni', from:'nepoții tăi care încă nu s-au născut', msg:'Bunicule, încă nu ne cunoști. Dar într-o zi o să venim. Și vrem să ne iei de mână, să ne duci în parc și să ne spui povești cu tata când era mic. Te rugăm să ne aștepți.'},
   {h:C.pactDays*24, when:'6 luni: Duster-ul', from:sonN(), msg:'Ai reușit. 6 luni fără nicio țigară. Pactul e pact: cei 6.000 € sunt ai tăi. Hai să mergem să-ți alegi Duster-ul. Dar să știi că adevăratul cadou mi l-ai făcut tu mie.'},
@@ -743,10 +745,11 @@ function caps(){ var n=nepot(), N=n.charAt(0).toUpperCase()+n.slice(1); return [
 function dur(ms){ if(ms<=0) return 'acum'; var d=Math.floor(ms/DAY),h=Math.floor(ms%DAY/HOUR),m=Math.floor(ms%HOUR/6e4);
   if(d>0) return d+(d===1?' zi':' zile')+(d<10?' '+h+' h':''); if(h>0) return h+' h '+m+' min'; return Math.max(1,m)+' min'; }
 function el(){ return st.start? Math.max(0,Date.now()-st.start):0; }
+function elCap(){ var t0=st.signed||st.start; return t0? Math.max(0,Date.now()-t0):0; }
 
 var lastOpen=-1;
 function renderCaps(){
-  var e=el(), box=$('caps'); box.innerHTML=''; var next=false;
+  var e=elCap(), box=$('caps'); box.innerHTML=''; var next=false;
   caps().forEach(function(c){
     var open=!!st.start && e>=c.h*HOUR, d=document.createElement('div');
     d.className='cap'+(open?' open':'');
@@ -794,9 +797,9 @@ function tick(){
   if(p>=1){ $('dusterTitle').textContent='Cheile sunt ale tale 🔑'; $('mGiftL').textContent='de la mine. Promisiunea e ținută'; $('dusterText').textContent='Ai reușit 6 luni. Suma totală pentru Duster: '+fmt(C.gift+saved)+' €. Hai să mergem să-l alegem.'; }
   else { $('dusterTitle').textContent='Încă '+daysLeft+(daysLeft===1?' zi':' zile'); $('dusterText').textContent='La final: '+fmt(C.gift)+' € de la mine + ~'+fmt(Math.round(C.pactDays*C.packPrice/C.eurRon/50)*50)+' € din țigările nefumate = ~'+fmt(C.gift+Math.round(C.pactDays*C.packPrice/C.eurRon/50)*50)+' € pentru Duster.'; }
   renderTarget(e); renderPhase(e);
-  var open=caps().filter(function(c){return e>=c.h*HOUR}).length;
+  var ec=elCap(), open=caps().filter(function(c){return ec>=c.h*HOUR}).length;
   if(open!==lastOpen){ renderCaps(); lastOpen=open; }
-  else document.querySelectorAll('#caps [data-h]').forEach(function(b){ b.textContent=dur(+b.dataset.h*HOUR-e); });
+  else document.querySelectorAll('#caps [data-h]').forEach(function(b){ b.textContent=dur(+b.dataset.h*HOUR-ec); });
   if(Math.floor(e/1000)%60===0) renderHeal();
 }
 
@@ -847,7 +850,7 @@ function applyState(){
 }
 
 /* ---------- SIGN ---------- */
-function sign(ts){ st.start=Math.min(ts,Date.now()); save(); applyState(); confetti();
+function sign(ts){ st.start=Math.min(ts,Date.now()); st.signed=Date.now(); save(); applyState(); confetti();
   setTimeout(function(){ $('dash').scrollIntoView({behavior:'smooth'}); },900); }
 $('signBtn').onclick=function(){ sign(Date.now()); };
 $('signPick').onclick=function(){ $('pickBox').classList.remove('hidden'); $('pickDate').value=toLocal(Date.now()-DAY); };
