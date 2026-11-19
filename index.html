@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tată, rămâi cu noi</title>
+<meta name="theme-color" content="#0b1020">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="Un site făcut de fiul tău. Pentru anii pe care îi mai avem de trăit împreună.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -233,6 +238,14 @@ footer a{color:var(--mute)}
   <p class="line sig" data-d="9400">— <span id="iSon">fiul tău</span></p>
   <div class="scrollcue" id="cue">Dă în jos, încet <span>↓</span></div>
 </section>
+
+<div id="installBar" class="hidden" style="margin-top:4px">
+  <div class="card" style="display:flex;gap:12px;align-items:center;border-color:rgba(245,185,76,.45)">
+    <div style="font-size:30px">📲</div>
+    <div style="flex:1"><b>Pune-l pe telefon</b><div class="mute" style="font-size:13px">Ca aplicație, cu iconiță, mereu la îndemână.</div></div>
+    <button class="btn small" id="installBtn">Instalează</button>
+  </div>
+</div>
 
 <!-- ============ PRIDE ============ -->
 <section style="padding-top:20px">
@@ -998,6 +1011,14 @@ window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
 })();
 
 window.addEventListener('hashchange',function(){ location.reload(); });
+// installable app (only on the real site, not inside previews)
+try{
+  if('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && !/claude/.test(location.hostname)) navigator.serviceWorker.register('sw.js').catch(function(){});
+}catch(e){}
+var deferredInstall=null;
+window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); deferredInstall=e; $('installBar').classList.remove('hidden'); });
+$('installBtn').onclick=function(){ if(!deferredInstall) return; deferredInstall.prompt(); deferredInstall.userChoice.finally(function(){ deferredInstall=null; $('installBar').classList.add('hidden'); }); };
+window.addEventListener('appinstalled',function(){ $('installBar').classList.add('hidden'); });
 renderStory(); applyState();
 setInterval(tick,1000);
 })();
