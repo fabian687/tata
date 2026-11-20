@@ -196,6 +196,21 @@ section{padding:64px 0 8px}
 .task .box{width:26px;height:26px;border-radius:8px;border:2px solid var(--mute);flex:none;display:grid;place-items:center}
 .task.done{opacity:.6}.task.done .box{background:var(--green);border-color:var(--green);color:#0b1020}
 .bigcall{display:block;padding:16px;border-radius:16px;background:rgba(134,200,255,.12);border:1px solid rgba(134,200,255,.35);text-decoration:none;color:var(--ink);font-weight:700;margin:12px 0}
+/* LOCK */
+#lock{position:fixed;inset:0;z-index:60;background:radial-gradient(800px 500px at 50% 110%,rgba(245,150,60,.28),transparent 60%),#0b1020;overflow:auto;transition:opacity .8s}
+#lock.bye{opacity:0;pointer-events:none}
+#lock .in{max-width:440px;margin:0 auto;padding:48px 22px 40px;text-align:center}
+#lock .heart{width:84px;height:84px;margin:0 auto 18px;border-radius:22px;display:block}
+#lock h1{font-size:30px;line-height:1.2}
+#lock .step{text-align:left;margin-top:18px;padding:18px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+#lock .step.done{opacity:.55}
+#lock .num{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--gold);color:#231705;font-weight:800;font-size:14px;margin-right:8px}
+#lock ol{margin:10px 0 0;padding-left:20px;line-height:1.7;color:var(--mute);font-size:15px}
+#lock ol b{color:var(--ink)}
+#codeIn{font:800 28px Manrope,system-ui,sans-serif;text-align:center;letter-spacing:.35em;margin-top:12px;padding:14px}
+#codeErr{color:var(--rose);font-size:14px;min-height:20px;margin-top:8px;text-align:center}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
 /* FAB */
 .fab{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;z-index:5;width:calc(100% - 28px);max-width:560px;display:flex;gap:8px}
 .fab .sos{position:static;transform:none;width:auto;flex:1;max-width:none;padding:19px 10px}
@@ -222,6 +237,30 @@ footer a{color:var(--mute)}
 </style>
 </head>
 <body>
+<div id="lock" class="hidden">
+  <div class="in">
+    <img class="heart" src="icon-192.png" alt="" onerror="this.style.display='none'">
+    <h1>Bună, tată 👋</h1>
+    <p class="mute" style="margin-top:10px">Aplicația asta e un cadou de la fiul tău. E încuiată până primești codul de la el.</p>
+
+    <div class="step" id="stepInstall">
+      <div><span class="num">1</span><b>Pune-o pe ecranul telefonului</b></div>
+      <button class="btn" id="lockInstall" style="width:100%;margin-top:14px" hidden>📲 Instalează aplicația</button>
+      <ol id="lockHow">
+        <li>Apasă pe <b>⋮</b> (cele trei puncte, sus în dreapta, în Chrome)</li>
+        <li>Alege <b>„Adaugă pe ecranul de pornire”</b> sau <b>„Instalează aplicația”</b></li>
+        <li>Apasă <b>Instalează</b>, apoi deschide aplicația de pe ecran (iconița cu inima aurie)</li>
+      </ol>
+    </div>
+
+    <div class="step" id="stepCode">
+      <div><span class="num">2</span><b>Introdu codul ca să deblochezi aplicația</b></div>
+      <input id="codeIn" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="••••" aria-label="Cod">
+      <div id="codeErr"></div>
+      <button class="btn" id="codeGo" style="width:100%">Deblochează</button>
+    </div>
+  </div>
+</div>
 <div id="sky"></div>
 <canvas id="stars"></canvas>
 <div id="demoBanner" class="demo hidden">Previzualizare: așa arată după 40 de zile de la semnare. Nimic nu se salvează.</div>
@@ -259,6 +298,13 @@ footer a{color:var(--mute)}
 
 <!-- ============ DASHBOARD (after signing) ============ -->
 <section id="dash" class="hidden">
+  <div class="card" id="notifCard" style="margin-bottom:14px;border-color:rgba(134,200,255,.45)">
+    <div style="display:flex;gap:12px;align-items:center">
+      <div style="font-size:30px">🔔</div>
+      <div style="flex:1"><b id="notifTitle">Pornește notificările zilnice</b><div class="mute" id="notifSub" style="font-size:13px">Un mesaj pe zi: ziua la care ai ajuns, mesajele noi de la noi, medaliile.</div></div>
+    </div>
+    <button class="btn" id="notifBtn" style="width:100%;margin-top:14px">Pornește notificările</button>
+  </div>
   <div class="card reveal">
     <div class="eyebrow">Tată, fără nicio țigară de</div>
     <div class="clock">
@@ -587,6 +633,7 @@ footer a{color:var(--mute)}
    CONFIG — what makes this site HIS. Edit these.
    ====================================================================== */
 var CONFIG = {
+  unlockCode: '7426',    // codul pe care i-l dai tatălui
   dadBirthYear: 1980,    // anul nașterii tatălui
   heartFactor: 2,        // are stent / boală coronariană: riscul de bază e ~dublu
   dadAtBirth: 24,        // câți ani avea tata când te-ai născut (vârsta lui = sonAge + 24)
@@ -608,9 +655,10 @@ var CONFIG = {
 (function(){
 var KEY='tata-ramai-v2', HOUR=36e5, DAY=24*HOUR;
 var demo = location.hash==='#demo';
+var deferredInstall=null;
 var st = load();
 function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ return {}; } }
-function save(){ if(demo) return; try{ localStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} }
+function save(){ if(demo) return; try{ localStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} try{ syncNotifState(); }catch(e){} }
 var C; function setC(){ C=Object.assign({}, CONFIG, st.cfg||{}); C.dadAge=new Date().getFullYear()-C.dadBirthYear; C.sonAge=C.dadAge-C.dadAtBirth; } setC();
 if(demo){ st={start:Date.now()-40*DAY-5*HOUR, signed:Date.now()-40*DAY-5*HOUR}; document.getElementById('demoBanner').classList.remove('hidden'); }
 
@@ -859,7 +907,7 @@ function applyState(){
   $('sosBtn').classList.toggle('hidden',!signed);
   $('signBtn').classList.toggle('hidden',signed); $('signPick').classList.toggle('hidden',signed); $('pickBox').classList.add('hidden');
   $('sigDad').classList.toggle('hidden',!signed); $('stamp').classList.toggle('hidden',!signed);
-  lastOpen=-1; renderCaps(); renderHeal(); tick(); observe();
+  lastOpen=-1; renderCaps(); renderHeal(); tick(); observe(); try{ renderNotif(); }catch(e){}
 }
 
 /* ---------- SIGN ---------- */
@@ -993,8 +1041,32 @@ function observe(){
 function fillBars(root){ root.querySelectorAll('[data-w]').forEach(function(i){ setTimeout(function(){ i.style.width=i.dataset.w+'%'; },150); }); }
 
 // intro letter, line by line
-document.querySelectorAll('#intro .line').forEach(function(l){ setTimeout(function(){ l.classList.add('show'); }, +l.dataset.d); });
-setTimeout(function(){ $('cue').classList.add('show'); }, 10400);
+function startIntro(){
+  document.querySelectorAll('#intro .line').forEach(function(l){ setTimeout(function(){ l.classList.add('show'); }, +l.dataset.d); });
+  setTimeout(function(){ $('cue').classList.add('show'); }, 10400);
+}
+
+/* ---------- LOCK SCREEN ---------- */
+var isApp = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone===true;
+function isUnlocked(){ if(demo) return true; try{ return localStorage.getItem(KEY+'-unlocked')==='1'; }catch(e){ return false; } }
+function showLock(){
+  $('lock').classList.remove('hidden'); document.body.style.overflow='hidden';
+  if(isApp){ $('stepInstall').classList.add('done'); $('lockHow').innerHTML='<li>✓ Gata, aplicația e pe ecran.</li>'; }
+}
+function unlock(){
+  try{ localStorage.setItem(KEY+'-unlocked','1'); }catch(e){}
+  $('lock').classList.add('bye'); document.body.style.overflow='';
+  setTimeout(function(){ $('lock').classList.add('hidden'); },800);
+  window.scrollTo(0,0); startIntro();
+}
+$('codeGo').onclick=function(){
+  var v=$('codeIn').value.replace(/\s/g,'');
+  if(v===String(C.unlockCode)){ unlock(); }
+  else { $('codeErr').textContent=v?'Cod greșit. Cere-l de la fiul tău.':'Scrie codul primit de la fiul tău.'; var b=$('stepCode'); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); }
+};
+$('codeIn').addEventListener('keydown',function(e){ if(e.key==='Enter') $('codeGo').click(); });
+$('lockInstall').onclick=function(){ if(deferredInstall){ deferredInstall.prompt(); deferredInstall.userChoice.finally(function(){ deferredInstall=null; $('lockInstall').hidden=true; }); } };
+
 
 // night → dawn
 function onScroll(){ var h=document.documentElement, p=h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight); document.documentElement.style.setProperty('--p',p.toFixed(3)); }
@@ -1015,12 +1087,53 @@ window.addEventListener('hashchange',function(){ location.reload(); });
 try{
   if('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && !/claude/.test(location.hostname)) navigator.serviceWorker.register('sw.js').catch(function(){});
 }catch(e){}
-var deferredInstall=null;
-window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); deferredInstall=e; $('installBar').classList.remove('hidden'); });
+window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); deferredInstall=e; $('installBar').classList.remove('hidden'); if(!isApp) $('lockInstall').hidden=false; });
 $('installBtn').onclick=function(){ if(!deferredInstall) return; deferredInstall.prompt(); deferredInstall.userChoice.finally(function(){ deferredInstall=null; $('installBar').classList.add('hidden'); }); };
-window.addEventListener('appinstalled',function(){ $('installBar').classList.add('hidden'); });
+window.addEventListener('appinstalled',function(){ $('installBar').classList.add('hidden'); $('lockInstall').hidden=true; $('stepInstall').classList.add('done'); $('lockHow').innerHTML='<li>✓ Instalată. Deschide-o acum de pe ecranul telefonului.</li>'; });
+/* ---------- DAILY NOTIFICATIONS (sent by the installed app itself) ---------- */
+function syncNotifState(){
+  if(demo || !('caches' in window) || !/^https?:$/.test(location.protocol)) return;
+  var data={ start:st.start||null, signed:st.signed||st.start||null, perDay:C.perDay, price:C.packPrice, eur:C.eurRon, gift:C.gift, pactDays:C.pactDays,
+    son:C.sonName||'fiul tău', mom:C.momName, nepot:C.nepotName||'nepoțelul',
+    caps:caps().map(function(c){return {h:c.h,from:c.from,when:c.when}}), targets:targets(), quotes:quotes() };
+  caches.open('ramai-state').then(function(c){ return c.put('state.json', new Response(JSON.stringify(data),{headers:{'Content-Type':'application/json'}})); }).catch(function(){});
+}
+function notifSupported(){ return 'serviceWorker' in navigator && 'Notification' in window; }
+function renderNotif(){
+  var card=$('notifCard'); if(!st.start || demo){ card.classList.add('hidden'); return; }
+  card.classList.remove('hidden');
+  if(!notifSupported()){ $('notifTitle').textContent='Notificările nu merg aici'; $('notifSub').textContent='Deschide aplicația instalată pe ecran, din Chrome.'; $('notifBtn').classList.add('hidden'); return; }
+  if(Notification.permission==='granted' && st.notifOn){ $('notifTitle').textContent='Notificările zilnice sunt pornite ✓'; $('notifSub').textContent='Primești un mesaj în fiecare zi.'; $('notifBtn').classList.add('hidden'); return; }
+  if(Notification.permission==='denied'){ $('notifTitle').textContent='Notificările sunt blocate'; $('notifSub').textContent='Setări telefon → Aplicații → Rămâi cu noi (sau Chrome) → Notificări → Permite.'; $('notifBtn').classList.add('hidden'); return; }
+  $('notifBtn').classList.remove('hidden');
+}
+$('notifBtn').onclick=function(){
+  if(!notifSupported()) return;
+  Notification.requestPermission().then(function(p){
+    if(p!=='granted'){ renderNotif(); return; }
+    syncNotifState();
+    return navigator.serviceWorker.ready.then(function(reg){
+      var job = ('periodicSync' in reg) ? reg.periodicSync.register('zilnic',{minInterval:6*60*60*1000}).catch(function(){}) : Promise.resolve();
+      return job.then(function(){
+        st.notifOn=true; save(); renderNotif();
+        return reg.showNotification('Gata, tată 🔔',{body:'Așa o să arate mesajele zilnice. Ne auzim mâine.',icon:'icon-192.png',badge:'icon-192.png',tag:'test'});
+      });
+    });
+  }).catch(function(){});
+};
+// every time the app opens: refresh state, re-register the daily job, catch up today's message if the phone skipped it
+function notifOnOpen(){
+  if(!st.notifOn || !notifSupported() || Notification.permission!=='granted') return;
+  navigator.serviceWorker.ready.then(function(reg){
+    if('periodicSync' in reg) reg.periodicSync.register('zilnic',{minInterval:6*60*60*1000}).catch(function(){});
+    if(reg.active) reg.active.postMessage({type:'catchup'});
+  }).catch(function(){});
+}
+
 renderStory(); applyState();
 setInterval(tick,1000);
+if(isUnlocked()) startIntro(); else showLock();
+syncNotifState(); renderNotif(); notifOnOpen();
 })();
 </script>
 </body>
