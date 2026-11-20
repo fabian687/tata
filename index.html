@@ -912,7 +912,7 @@ function applyState(){
 }
 
 /* ---------- SIGN ---------- */
-function sign(ts){ st.start=Math.min(ts,Date.now()); st.signed=Date.now(); save(); applyState(); confetti();
+function sign(ts){ st.start=Math.min(ts,Date.now()); st.signed=Date.now(); save(); applyState(); confetti(); try{ enableNotif(); }catch(e){}
   setTimeout(function(){ $('dash').scrollIntoView({behavior:'smooth'}); },900); }
 $('signBtn').onclick=function(){ sign(Date.now()); };
 $('signPick').onclick=function(){ $('pickBox').classList.remove('hidden'); $('pickDate').value=toLocal(Date.now()-DAY); };
@@ -1108,8 +1108,8 @@ function renderNotif(){
   if(Notification.permission==='denied'){ $('notifTitle').textContent='Notificările sunt blocate'; $('notifSub').textContent='Setări telefon → Aplicații → Rămâi cu noi (sau Chrome) → Notificări → Permite.'; $('notifBtn').classList.add('hidden'); return; }
   $('notifBtn').classList.remove('hidden');
 }
-$('notifBtn').onclick=function(){
-  if(!notifSupported()) return;
+function enableNotif(){
+  if(!notifSupported() || demo) return;
   Notification.requestPermission().then(function(p){
     if(p!=='granted'){ renderNotif(); return; }
     syncNotifState();
@@ -1117,11 +1117,12 @@ $('notifBtn').onclick=function(){
       var job = ('periodicSync' in reg) ? reg.periodicSync.register('zilnic',{minInterval:6*60*60*1000}).catch(function(){}) : Promise.resolve();
       return job.then(function(){
         st.notifOn=true; save(); renderNotif();
-        return reg.showNotification('Gata, tată 🔔',{body:'Așa o să arate mesajele zilnice. Ne auzim mâine.',icon:'icon-192.png',badge:'icon-192.png',tag:'test'});
+        return reg.showNotification('Gata, tată 🔔',{body:'Pactul e semnat. De mâine primești în fiecare zi un mesaj de la noi.',icon:'icon-192.png',badge:'icon-192.png',tag:'test'});
       });
     });
   }).catch(function(){});
-};
+}
+$('notifBtn').onclick=enableNotif;
 // every time the app opens: refresh state, re-register the daily job, catch up today's message if the phone skipped it
 function notifOnOpen(){
   if(!st.notifOn || !notifSupported() || Notification.permission!=='granted') return;
